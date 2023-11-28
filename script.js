@@ -1,81 +1,52 @@
+
+//-----------------------------------------------------------------------
 const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYOEs4QM-0kKjx1NPpj9LfAHWcNGSikmC5EKSBs9NUkZCG8usYOcz5bjelCJRhEUBtvFlSAr8nRDv5/pub?gid=0&single=true&output=csv";
-
-// function planilhaDb() {
-//   const response = fetch(url)
-//     .then((response) => response.text())
-//     .then((data) => console.log(Papa.parse(data, { header: true })))
-//     .catch((error) => console.log(error));
-// }
-
-// planilhaDb();
 
 async function planilhaDb() {
   const response = await fetch(url);
   const data = await response.text();
   const planilhaData = Papa.parse(data, { header: true }).data;
 
-  // Imprime todos os dados da planilha
-  console.log("Planilha da Mega Sena:", planilhaData);
-
-  // Acessa o último item da array
-  const ultimoItem = planilhaData[planilhaData.length - 1];
-
-  // Imprime o último item da planilha
-  console.log("Último item da Planilha da Mega Sena:", ultimoItem);
+  
+ 
+  console.log("Planilha da Mega Sena (formatada):", dezenas1Ate6);
 }
 
 planilhaDb();
 
+//---------------------------------------------------------------------
 
-let dezenasMegaSena;
+const urlPagina2 = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYOEs4QM-0kKjx1NPpj9LfAHWcNGSikmC5EKSBs9NUkZCG8usYOcz5bjelCJRhEUBtvFlSAr8nRDv5/pub?gid=1007340004&single=true&output=csv";
 
-async function buscarUltimoResultado() {
-  try {
-    const resposta = await fetch(
-      "https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena"
-    );
+async function frequenciaNumeros() {
+  const response = await fetch(urlPagina2);
+  const data = await response.text();
+  const pagina2Data = Papa.parse(data, { header: false }).data;
 
-    if (resposta.status === 200) {
-      const dados = await resposta.json();
-      dezenasMegaSena = [dados.numero, ...dados.listaDezenas];
-      return { concurso: dezenasMegaSena };
-    } else {
-      console.error("Falha ao buscar resultados da Mega Sena.");
-      return null;
-    }
-  } catch (erro) {
-    console.error("Erro na solicitação:", erro);
-    return null;
+  // Criar um objeto para armazenar a frequência de cada número
+  const frequencia = {};
+  pagina2Data.forEach((row) => {
+    const numero = parseInt(row[0]); 
+    const quantidade = parseInt(row[1]);
+    frequencia[numero] = quantidade;
+  });
+
+  // Matriz de números ordenados pela frequência
+  const numerosOrdenados = Object.keys(frequencia).sort((a, b) => frequencia[b] - frequencia[a]);
+
+  // Divide os números em grupos mantendo números com a mesma frequência juntos
+  const groups = [];
+  for (let i = 0; i < 10; i++) {
+    const start = i * 6;
+    const end = start + 6;
+    groups.push(numerosOrdenados.slice(start, end));
   }
+
+  // Imprimir os grupos
+  groups.forEach((group, index) => {
+    console.log(`Grupo ${String.fromCharCode(65 + index)} = [${group.join(', ')}]`);
+  });
 }
 
-async function obterUltimoResultado() {
-  if (dezenasMegaSena === undefined) {
-    await buscarUltimoResultado();
-  }
-  return dezenasMegaSena;
-}
 
-async function ultimoResultado() {
-  const dezenas = await obterUltimoResultado();
-  console.log("Último Resultado da Mega Sena:", dezenas);
-
-  if (ultimaArrayPlanilha && dezenas[0] === ultimaArrayPlanilha.numero){
-    console.log("Jogo já incluído na planilha. Não enviar dados.");
-  } else {
-    // Adicionar o último resultado à planilha
-    const enviarDados = () => {
-    fetch('https://api.sheetmonkey.io/form/iB9B4iWoGiZiRCrZxFVfkq', {
-      method: 'post',
-      headers: {
-        'accept': 'application/json',
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify(dezenas)
-    })
-    }
-
-    enviarDados();
-  }
-}
-ultimoResultado();
+frequenciaNumeros();
