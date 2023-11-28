@@ -9,7 +9,7 @@ async function planilhaDb() {
 
   
  
-  console.log("Planilha da Mega Sena (formatada):", dezenas1Ate6);
+  console.log("Planilha da Mega Sena (formatada):", planilhaData);
 }
 
 planilhaDb();
