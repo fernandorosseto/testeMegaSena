@@ -1,17 +1,17 @@
 //-----------------------------------------------------------------------
 
-// const url =
-//   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYOEs4QM-0kKjx1NPpj9LfAHWcNGSikmC5EKSBs9NUkZCG8usYOcz5bjelCJRhEUBtvFlSAr8nRDv5/pub?gid=0&single=true&output=csv";
+const url =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYOEs4QM-0kKjx1NPpj9LfAHWcNGSikmC5EKSBs9NUkZCG8usYOcz5bjelCJRhEUBtvFlSAr8nRDv5/pub?gid=0&single=true&output=csv";
 
-// async function planilhaDb() {
-//   const response = await fetch(url);
-//   const data = await response.text();
-//   const planilhaData = Papa.parse(data, { header: true }).data;
+async function planilhaDb() {
+  const response = await fetch(url);
+  const data = await response.text();
+  const planilhaData = Papa.parse(data, { header: true }).data;
 
-//   // console.log(planilhaData);
-// }
+  // console.log(planilhaData);
+}
 
-// planilhaDb();
+planilhaDb();
 
 //---------------------------------------------------------------------
 const urlPagina2 =
@@ -128,7 +128,7 @@ async function execute() {
 
   const resultado = produtoCartesiano(
     grupos[0],
-    grupos[1],
+    grupos[0],
     grupos[2],
     grupos[3],
     grupos[4],
