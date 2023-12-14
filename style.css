@@ -1,0 +1,200 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300;400;500;700&family=Source+Sans+Pro:wght@200;300;400&display=swap");
+
+/* Cores e fontes do projeto */
+
+:root {
+  --color-one: #0065b7;
+  --color-two: #7cba3b;
+  --color-background-one: #ffffff;
+  --color-background-two: rgb(238, 238, 238);
+  --color-text: #000000;
+  --text-title: "Noto Sans", sans-serif;
+  --text-others: "Source Sans Pro", sans-serif;
+}
+
+/* Reset CSS */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+  color: inherit;
+  line-height: 1.5;
+}
+
+/* Padronizandos fonts */
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--text-title);
+}
+
+p {
+  font-family: var(--text-others);
+}
+
+button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  outline: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 0px;
+}
+
+body {
+  height: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--color-background-one);
+}
+
+header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  background-color: var(--color-one);
+  /* box-shadow: 0px 14px 14px -1px rgba(111,114,173,0.53);
+    -webkit-box-shadow: 0px 14px 14px -1px rgba(111,114,173,0.53);
+    -moz-box-shadow: 0px 14px 14px -1px rgba(111,114,173,0.53); */
+  color: var(--color-background-one);
+  text-transform: uppercase;
+}
+
+main {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+}
+
+.container {
+  width: 100%;
+  height: 90vh;
+  border: 1px solid var(--color-one);
+  object-fit: cover;
+}
+
+.conteudo {
+  color: var(--color-text);
+  font-weight: 700;
+  margin: 10px;
+}
+
+main > section > div > h2 {
+  color: var(--color-one);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.setGames {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.setGames > input {
+  width: 50px;
+  padding: 4px;
+  text-align: center;
+  font-size: 12px;
+  text-transform: uppercase;
+  border-width: 1px;
+  border-color: #cccccc;
+  background-color: #ffffff;
+  color: #000000;
+  border-style: solid;
+  border-radius: 9px;
+  box-shadow: 2px 4px 5px rgba(66, 66, 66, 0.75);
+}
+
+.setGames > input:focus {
+  outline: none;
+}
+
+#resultadoContainer {
+  margin-top: 20px;
+}
+
+#futurosjogosMegaSena {
+  background-color: lightblue;
+  padding: 8px;
+  margin: 3px;
+  border: 1px solid var(--color-one);
+}
+
+.resultadoGrupo {
+  margin-bottom: 10px;
+}
+
+.resultadoGrupo span {
+  margin-right: 10px;
+}
+
+.btn {
+  display: block;
+  margin: 10px auto;
+  outline: 0;
+  border: 0;
+  background-color: var(--color-one);
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-bottom: 4px solid #99c2ee;
+  font-weight: 700;
+  color: white;
+  line-height: 26px;
+}
+
+#grupoFrequencia {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#grupoFrequencia .grupo {
+  background-color: lightblue;
+  padding: 8px;
+  margin: 3px;
+  border: 1px solid var(--color-one);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th,
+td {
+  border-bottom: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+@media screen and (max-width: 601px) {
+  main {
+    display: flex;
+    flex-direction: column;
+  }
+}

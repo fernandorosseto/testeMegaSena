@@ -5,11 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="/scripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
-
-    <title>testemegasena</title>
+    <link rel="stylesheet" href="/style.css" />
+    <title>Estudos Mega Sena</title>
   </head>
   <body>
-    <h1>testemegasena</h1>
+    <header>
+      <h1>Estudos da Mega Sena</h1>
+    </header>
+    <main>
+      <section class="container">
+        <div class="conteudo">
+          <h2>Grupo Frequencia</h2>
+          <div id="grupoFrequencia">
+            <!-- conteúdo -->
+            conteúdo
+          </div>
+        </div>
+      </section>
+      <!-- <section class="container">
+        <div class="conteudo">
+          <h2>Grupo Atraso</h2>
+          conteúdo
+          <p>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos
+            debitis maxime vero dolores ab, vel ipsam praesentium numquam
+            repellendus, beatae odit assumenda tempore cumque? Nulla dolorum
+            iure optio eum sit.
+          </p>
+        </div>
+      </section> -->
+      <section class="container">
+        <div class="conteudo">
+          <h2>Formação de Jogos</h2>
+          <!-- conteúdo -->
+          <form class="setGames" id="formJogos">
+            <input
+              type="text"
+              id="numerosEspecificos"
+              placeholder="Insira números específicos" />
+            <input
+              type="text"
+              name="primeroGrupo"
+              id="primeiroGrupo"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              required />
+            <input
+              type="text"
+              name="segundoGrupo"
+              id="segundoGrupo"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              required />
+            <input
+              type="text"
+              name="terceiroGrupo"
+              id="terceiroGrupo"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              required />
+            <input
+              type="text"
+              name="quartoGrupo"
+              id="quartoGrupo"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              required />
+            <input
+              type="text"
+              name="quintoGrupo"
+              id="quintoGrupo"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              required />
+            <input
+              type="text"
+              name="sextoGrupo"
+              id="sextoGrupo"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              required />
+            <button type="submit">Enviar</button>
+          </form>
+          <button class="btn" id="btnEnviar">Enviar</button>
+          <div id="resultado"></div>
+
+          <!-- Resultado será exibido aqui -->
+          <div id="resultado"></div>
+        </div>
+      </section>
+    </main>
+    <section>
+      <div id="ultimos10jogos"></div>
+    </section>
   </body>
 </html>
