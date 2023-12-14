@@ -18,8 +18,7 @@ const urlPagina2 =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYOEs4QM-0kKjx1NPpj9LfAHWcNGSikmC5EKSBs9NUkZCG8usYOcz5bjelCJRhEUBtvFlSAr8nRDv5/pub?gid=1007340004&single=true&output=csv";
 
 //página4 para testes
-//gid pag2 1007340004
-//gid pag4 4064556
+//https://docs.google.com/spreadsheets/d/1w6Mk0vAPOE35N91CdO8XinDkDrGAVjO-0JLkAtEn_us/edit#gid=4064556
 
 let grupos;
 
@@ -35,6 +34,8 @@ async function frequenciaNumeros() {
   const numerosOrdenados = pagina2Data.sort(
     (a, b) => parseInt(b[1]) - parseInt(a[1])
   );
+
+  console.log(numerosOrdenados);
 
   numerosOrdenados.forEach((row, i) => {
     const numero = parseInt(row[0]);
@@ -55,14 +56,14 @@ async function frequenciaNumeros() {
 
     if (grupoIndex < grupos.length) {
       grupos[grupoIndex].push(numero);
-      //console.log(grupos[grupoIndex]);
+      console.log(grupos[grupoIndex]);
     }
 
     if (tamanhoDoGrupo >= 5 && quantidade !== quantidadeDaProximaIteracao) {
       grupoIndex += 1;
     }
     if (
-      tamanhoDoGrupo === 3 &&
+      tamanhoDoGrupo === 4 &&
       quantidadeDaProximaIteracao === quantidadeDaProximaIteracao2
     ) {
       grupoIndex += 1;
@@ -84,65 +85,61 @@ async function frequenciaNumeros() {
 
 frequenciaNumeros();
 
-function excluirArraysComNumerosEspecificos(arrays, numerosEspecificos) {
-  return arrays.filter((array) => {
-    for (const numeroEspecifico of numerosEspecificos) {
-      if (array.includes(numeroEspecifico)) {
-        return false; // Exclui a array se encontrar um número específico
-      }
-    }
-    return true; // Mantém a array se não encontrar nenhum número específico
-  });
-}
+// async function execute() {
+//   await frequenciaNumeros();
 
-async function execute() {
-  await frequenciaNumeros();
-  console.log("inicio função execute");
-  function produtoCartesiano(...conjuntos) {
-    return conjuntos.reduce(
-      (acumulador, conjuntoAtual) => {
-        const novoAcumulador = [];
-        acumulador.forEach((elementoAcumulado) => {
-          conjuntoAtual.forEach((elementoConjuntoAtual) => {
-            const novaCombinação = [
-              ...elementoAcumulado,
-              elementoConjuntoAtual,
-            ];
-            // Verifica se há pelo menos dois números iguais na nova combinação
-            if (!temDoisNumerosIguais(novaCombinação)) {
-              novoAcumulador.push(novaCombinação);
-            }
-          });
-        });
-        return novoAcumulador;
-      },
-      [[]]
-    );
-  }
+//   // Função para gerar as combinações dos grupos
+//   function generateCombinations(groups, limit) {
+//     const result = [];
+//     const indices = new Array(groups.length).fill(0);
+//     let count = 0;
 
-  // Função para verificar se há pelo menos dois números iguais em uma array
-  function temDoisNumerosIguais(array) {
-    const conjuntoUnico = new Set(array);
-    return array.length !== conjuntoUnico.size;
-  }
+//     while (true) {
+//       const combination = indices.map((groupIndex, numberIndex) => {
+//         const group = groups[numberIndex];
+//         return group && group[groupIndex];
+//       });
 
-  const resultado = produtoCartesiano(
-    grupos[0],
-    grupos[1],
-    grupos[2],
-    grupos[3],
-    grupos[4],
-    grupos[5]
-  );
+//       result.push(combination);
+//       count++;
 
-  console.log(resultado);
+//       let i = 0;
+//       while (
+//         i < groups.length &&
+//         ++indices[i] === (groups[i] ? groups[i].length : 0)
+//       ) {
+//         indices[i++] = 0;
+//       }
 
-  // Exemplo de uso: exclui arrays que contêm os números 1 e 2
-  const resultadoFiltrado = excluirArraysComNumerosEspecificos(
-    resultado,
-    [1, 2]
-  );
-  console.log(resultadoFiltrado);
-}
+//       if (i === groups.length || count === limit) {
+//         break;
+//       }
+//     }
 
-execute();
+//     return result;
+//   }
+
+//   // Defina os grupos escolhidos pelo usuário
+//   const gruposEscolhidos = [grupos[1], grupos[1], grupos[2]];
+//   // Gere as combinações limitando a 30 jogos
+//   // Remover grupos duplicados
+//   const gruposUnicos = Array.from(new Set(gruposEscolhidos));
+
+//   // Remover combinações duplicadas
+//   const combUnique = gruposUnicos.reduce(
+//     (acc, grupo) =>
+//       acc.filter((comb) => !grupo.some((num) => comb.includes(num))),
+//     generateCombinations(gruposUnicos, Infinity)
+//   );
+
+//   // Limitar a 30 jogos
+//   const limiteDeJogos = 30;
+//   const todasAsCombinacoes = combUnique.slice(0, limiteDeJogos);
+
+//   // Exiba as combinações no console
+//   todasAsCombinacoes.forEach((combination, index) => {
+//     console.log(`Jogo ${index + 1}: ${combination.join(", ")}`);
+//   });
+// }
+
+// execute();
