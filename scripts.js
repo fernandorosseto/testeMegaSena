@@ -286,32 +286,87 @@ document.addEventListener("DOMContentLoaded", function () {
     return array.length !== conjuntoUnico.size;
   }
 
-  // function produtoCartesiano(...conjuntos) {
-  //   return conjuntos.reduce(
-  //     (acumulador, conjuntoAtual) => {
-  //       const novoAcumulador = [];
-  //       acumulador.forEach((elementoAcumulado) => {
-  //         conjuntoAtual.forEach((elementoConjuntoAtual) => {
-  //           const novaCombinação = [
-  //             ...elementoAcumulado,
-  //             elementoConjuntoAtual,
-  //           ];
-  //           // Verifica se há pelo menos dois números iguais na nova combinação
-  //           if (!temDoisNumerosIguais(novaCombinação)) {
-  //             novoAcumulador.push(novaCombinação);
-  //           }
-  //         });
-  //       });
-  //       return novoAcumulador;
-  //     },
-  //     [[]]
-  //   );
-  // }
+  function removerJogosDuplicados(jogos) {
+    const jogosUnicos = [];
+    const jogosVistos = new Set();
 
-  // // Função para verificar se há pelo menos dois números iguais em uma array
-  // function temDoisNumerosIguais(array) {
-  //   const conjuntoUnico = new Set(array);
-  //   return array.length !== conjuntoUnico.size;
+    for (const jogo of jogos) {
+      // Ordena os números do jogo para garantir consistência
+      const jogoOrdenado = [...jogo].sort().join(",");
+
+      if (!jogosVistos.has(jogoOrdenado)) {
+        jogosVistos.add(jogoOrdenado);
+        jogosUnicos.push(jogo);
+      }
+    }
+    return jogosUnicos;
+  }
+
+  function exibirNumerosNaTabela(numeros) {
+    // Selecione o elemento com o ID "resultado"
+    const resultadoElemento = document.getElementById("resultado");
+
+    // Crie uma lista não ordenada (ul)
+    const lista = document.createElement("ul");
+
+    // Adicione jogos à lista
+    Object.keys(numeros).forEach((coluna, index) => {
+      const jogo = numeros[coluna].join("\t");
+      const itemLista = document.createElement("li");
+      itemLista.textContent = `Jogo ${index + 1}: ${jogo}`;
+      lista.appendChild(itemLista);
+    });
+
+    // Limpe o conteúdo atual do elemento "resultado"
+    resultadoElemento.innerHTML = "";
+
+    // Adicione a lista ao elemento "resultado"
+    resultadoElemento.appendChild(lista);
+  }
+
+  function exibirNumerosNaNovaGuia(numeros) {
+    const lista = Object.keys(numeros).map((coluna, index) => {
+      const jogo = numeros[coluna].join("\t");
+      return `Jogo ${index + 1}: ${jogo}`;
+    });
+
+    // Criar uma nova guia
+    const novaGuia = window.open("");
+
+    // Adicionar conteúdo à nova guia
+    novaGuia.document.write(
+      "<html><head><title>Resultados da Mega Sena</title></head><body><ul>"
+    );
+    lista.forEach((item) => {
+      novaGuia.document.write(`<li>${item}</li>`);
+    });
+    novaGuia.document.write("</ul></body></html>");
+    novaGuia.document.close();
+  }
+
+  // function downloadExcel(data) {
+  //   const ws = XLSX.utils.json_to_sheet(data);
+  //   const wb = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+  //   // Gere um blob (Binary Large Object) a partir do arquivo Excel
+  //   const blob = XLSX.write(wb, { bookType: "xlsx", type: "blob" });
+
+  //   // Crie um URL temporário e configure o link de download
+  //   const url = window.URL.createObjectURL(blob);
+  //   const a = document.createElement("a");
+  //   a.href = url;
+  //   a.download = "resultados.xlsx";
+
+  //   // Adicione o link ao corpo da página e clique nele
+  //   document.body.appendChild(a);
+  //   a.click();
+
+  //   // Remova o link da página
+  //   document.body.removeChild(a);
+
+  //   // Limpe o URL temporário
+  //   window.URL.revokeObjectURL(url);
   // }
 
   async function execute() {
@@ -336,10 +391,21 @@ document.addEventListener("DOMContentLoaded", function () {
       const gruposValidos = arraysGruposParaProcessamento.filter(Array.isArray);
 
       //Chama a função produtoCartesiano
-      const proximosJogosMegaSena = produtoCartesiano(...gruposValidos);
+      const gruposValidosParaProcessar = produtoCartesiano(...gruposValidos);
+
+      // Remover jogos duplicados
+      const proximosJogosMegaSena = removerJogosDuplicados(
+        gruposValidosParaProcessar
+      );
 
       // Imprime o resultado
       console.log("Proximos Jogos Mega Sena:", proximosJogosMegaSena);
+      exibirNumerosNaTabela(proximosJogosMegaSena);
+      exibirNumerosNaNovaGuia(proximosJogosMegaSena);
+      // const dadosParaDownload = proximosJogosMegaSena.map((comb) => ({
+      //   Jogo: comb.join("\t"), // Separa os números por tabulação
+      // }));
+      // downloadExcel(dadosParaDownload);
     });
   }
   execute();

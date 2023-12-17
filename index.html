@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="/scripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="/style.css" />
     <title>Estudos Mega Sena</title>
   </head>
@@ -81,15 +82,14 @@
               maxlength="1"
               oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
               required />
-            <input
+            <<input
               type="text"
               id="excluirJogos"
               placeholder="Insira números separados por vírgula para excluir jogos."
-              value="" />
+              value=""
+              oninput="this.value = this.value.replace(/[^0-9,]/g, '')" />
           </form>
           <button class="btn" id="btnEnviar">Enviar</button>
-          <div id="resultado"></div>
-
           <!-- Resultado será exibido aqui -->
           <div id="resultado"></div>
         </div>
