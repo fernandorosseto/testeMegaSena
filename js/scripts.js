@@ -302,27 +302,27 @@ document.addEventListener("DOMContentLoaded", function () {
     return jogosUnicos;
   }
 
-  function exibirNumerosNaTabela(numeros) {
-    // Selecione o elemento com o ID "resultado"
-    const resultadoElemento = document.getElementById("resultado");
+  // function exibirNumerosNaTabela(numeros) {
+  //   // Selecione o elemento com o ID "resultado"
+  //   const resultadoElemento = document.getElementById("resultado");
 
-    // Crie uma lista não ordenada (ul)
-    const lista = document.createElement("ul");
+  //   // Crie uma lista não ordenada (ul)
+  //   const lista = document.createElement("ul");
 
-    // Adicione jogos à lista
-    Object.keys(numeros).forEach((coluna, index) => {
-      const jogo = numeros[coluna].join("\t");
-      const itemLista = document.createElement("li");
-      itemLista.textContent = `Jogo ${index + 1}: ${jogo}`;
-      lista.appendChild(itemLista);
-    });
+  //   // Adicione jogos à lista
+  //   Object.keys(numeros).forEach((coluna, index) => {
+  //     const jogo = numeros[coluna].join("\t");
+  //     const itemLista = document.createElement("li");
+  //     itemLista.textContent = `Jogo ${index + 1}: ${jogo}`;
+  //     lista.appendChild(itemLista);
+  //   });
 
-    // Limpe o conteúdo atual do elemento "resultado"
-    resultadoElemento.innerHTML = "";
+  //   // Limpe o conteúdo atual do elemento "resultado"
+  //   resultadoElemento.innerHTML = "";
 
-    // Adicione a lista ao elemento "resultado"
-    resultadoElemento.appendChild(lista);
-  }
+  //   // Adicione a lista ao elemento "resultado"
+  //   resultadoElemento.appendChild(lista);
+  // }
 
   function exibirNumerosNaNovaGuia(numeros) {
     const lista = Object.keys(numeros).map((coluna, index) => {
