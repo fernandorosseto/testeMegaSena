@@ -400,7 +400,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Imprime o resultado
       console.log("Proximos Jogos Mega Sena:", proximosJogosMegaSena);
-      exibirNumerosNaTabela(proximosJogosMegaSena);
+      // exibirNumerosNaTabela(proximosJogosMegaSena);
       exibirNumerosNaNovaGuia(proximosJogosMegaSena);
       // const dadosParaDownload = proximosJogosMegaSena.map((comb) => ({
       //   Jogo: comb.join("\t"), // Separa os números por tabulação
