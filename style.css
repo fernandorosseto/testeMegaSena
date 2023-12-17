@@ -104,9 +104,14 @@ main > section > div > h2 {
 }
 
 .setGames {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px; /* Espaçamento entre os inputs */
   justify-content: center;
-  gap: 5px;
+}
+#excluirJogos {
+  grid-column: span 6;
+  width: 100%;
 }
 
 .setGames > input {
@@ -183,6 +188,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  overflow: hidden;
 }
 
 th,
@@ -190,6 +196,7 @@ td {
   border-bottom: 1px solid #ccc;
   padding: 8px;
   text-align: center;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 601px) {

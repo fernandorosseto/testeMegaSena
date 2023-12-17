@@ -41,10 +41,6 @@
           <form class="setGames" id="formJogos">
             <input
               type="text"
-              id="numerosEspecificos"
-              placeholder="Insira números específicos" />
-            <input
-              type="text"
               name="primeroGrupo"
               id="primeiroGrupo"
               maxlength="1"
@@ -85,7 +81,11 @@
               maxlength="1"
               oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
               required />
-            <button type="submit">Enviar</button>
+            <input
+              type="text"
+              id="excluirJogos"
+              placeholder="Insira números separados por vírgula para excluir jogos."
+              value="" />
           </form>
           <button class="btn" id="btnEnviar">Enviar</button>
           <div id="resultado"></div>

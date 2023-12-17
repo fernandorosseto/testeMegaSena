@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", function () {
   //gid pag4 4064556
   let pagina2Data;
   let resultadoGrupos;
+  let gruposFrequencia;
+  let numerosExcluir;
 
   async function frequenciaNumeros() {
     const response = await fetch(urlPagina2);
@@ -36,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const sortedData = data.sort((a, b) => b[1] - a[1]);
 
       // Inicializar os grupos
-      const gruposFrequencia = Array.from({ length: 10 }, () => []);
+      gruposFrequencia = Array.from({ length: 10 }, () => []);
 
       // Distribuir as dezenas nos grupos de forma decrescente e mantendo ordem dentro de cada grupo
       let grupoIndex = 0;
@@ -115,31 +117,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     resultadoGrupos = distribuirDezenas(pagina2Data);
-    console.log(resultadoGrupos);
+    //console.log(resultadoGrupos);
   }
   frequenciaNumeros();
-
-  function produtoCartesiano(...conjuntos) {
-    return conjuntos.reduce(
-      (acumulador, conjuntoAtual) => {
-        const novoAcumulador = [];
-        acumulador.forEach((elementoAcumulado) => {
-          conjuntoAtual.forEach((elementoConjuntoAtual) => {
-            const novaCombinação = [
-              ...elementoAcumulado,
-              elementoConjuntoAtual,
-            ];
-            // Verifica se há pelo menos dois números iguais na nova combinação
-            if (!temDoisNumerosIguais(novaCombinação)) {
-              novoAcumulador.push(novaCombinação);
-            }
-          });
-        });
-        return novoAcumulador;
-      },
-      [[]]
-    );
-  }
 
   //   function produtoCartesianoLimite(limite, ...conjuntos) {
   //     const resultado = conjuntos.reduce(
@@ -165,64 +145,51 @@ document.addEventListener("DOMContentLoaded", function () {
   //     return Array.isArray(resultado) ? resultado.slice(0, limite) : [];
   //   }
 
+  function produtoCartesiano(...conjuntos) {
+    return conjuntos.reduce(
+      (acumulador, conjuntoAtual) => {
+        const novoAcumulador = [];
+        acumulador.forEach((elementoAcumulado) => {
+          conjuntoAtual.forEach((elementoConjuntoAtual) => {
+            const novaCombinação = [
+              ...elementoAcumulado,
+              elementoConjuntoAtual,
+            ];
+            // Verifica se há pelo menos dois números iguais na nova combinação
+            if (!temDoisNumerosIguais(novaCombinação)) {
+              novoAcumulador.push(novaCombinação);
+            }
+          });
+        });
+        return novoAcumulador;
+      },
+      [[]]
+    );
+  }
+
   // Função para verificar se há pelo menos dois números iguais em uma array
   function temDoisNumerosIguais(array) {
     const conjuntoUnico = new Set(array);
     return array.length !== conjuntoUnico.size;
   }
 
-  function obterNumerosExcluir() {
-    const numerosExcluirInput = document.getElementById("numerosExcluir");
-
-    // Verifica se o elemento existe antes de acessar a propriedade value
-    if (numerosExcluirInput) {
-      const numerosExcluirTexto = numerosExcluirInput.value;
-
-      // Verifica se a string não está vazia antes de dividir
-      if (numerosExcluirTexto.trim() !== "") {
-        // Divida a entrada do usuário em uma matriz de números
-        const numerosExcluirArray = numerosExcluirTexto
-          .split(",")
-          .map((numero) => parseInt(numero.trim(), 10))
-          .filter((numero) => !isNaN(numero));
-
-        return numerosExcluirArray;
-      }
-    }
-
-    // Se o elemento não existe ou a string está vazia, retorna uma matriz vazia
-    return [];
-  }
-
-  //   function filtrarResultadoComNumerosEspecificos(resultado, numerosFiltrar) {
-  //     // Verifica se resultado é uma array
-  //     if (!Array.isArray(resultado)) {
-  //       console.error("O resultado não é uma array");
-  //       return [];
-  //     }
-
-  //     const resultadoFiltrado = resultado.filter((grupo) => {
-  //       // Verifica se pelo menos um número do grupo está na lista de números a filtrar
-  //       return grupo.some((numero) => numerosFiltrar.includes(numero));
-  //     });
-
-  //     return resultadoFiltrado;
-  //   }
-
   function obterLetraDoIndice(indice) {
     return String.fromCharCode("A".charCodeAt(0) + indice);
   }
 
   function excluirArraysComNumerosEspecificos(resultado, numerosExcluir) {
-    // Verifica se resultado é uma array
     if (!Array.isArray(resultado)) {
       console.error("O resultado não é uma array");
       return [];
     }
 
     const resultadoGruposExcluidos = resultado.filter((grupo) => {
-      // Verifica se pelo menos um número do grupo está na lista de números a excluir
-      return !grupo.some((numero) => numerosExcluir.includes(numero));
+      const numerosNoGrupo = gruposFrequencia.filter((numero) => {
+        return numerosExcluir.includes(numero);
+      });
+      console.log("numerosNoGrupo:", numerosNoGrupo);
+
+      return numerosNoGrupo.length === 0;
     });
 
     return resultadoGruposExcluidos;
@@ -230,7 +197,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function execute() {
     await frequenciaNumeros();
-    console.log("inicio função execute");
+    //console.log("inicio função execute");
+
+    function obterNumerosExcluir() {
+      const numerosExcluirInput = document.getElementById("excluirJogos");
+
+      // Verifica se o elemento existe antes de acessar a propriedade value
+      if (numerosExcluirInput) {
+        const numerosExcluirTexto = numerosExcluirInput.value;
+
+        // Verifica se a string não está vazia antes de dividir
+        if (numerosExcluirTexto.trim() !== "") {
+          // Divida a entrada do usuário em uma matriz de números
+          const numerosExcluirArray = numerosExcluirTexto
+            .split(",")
+            .map((numero) => parseInt(numero.trim(), 10))
+            .filter((numero) => !isNaN(numero));
+
+          return numerosExcluirArray;
+        }
+      }
+
+      // Se o elemento não existe ou a string está vazia, retorna uma matriz vazia
+      return [];
+    }
 
     function exibirGrupos() {
       const divGrupoFrequencia = document.getElementById("grupoFrequencia");
@@ -279,7 +269,6 @@ document.addEventListener("DOMContentLoaded", function () {
     exibirGrupos();
 
     function obterGruposPeloInput() {
-      console.log("btn ok");
       const primeiroGrupo = document
         .getElementById("primeiroGrupo")
         .value.toUpperCase();
@@ -312,88 +301,73 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnEnviar = document.getElementById("btnEnviar");
     btnEnviar.addEventListener("click", function () {
       calcularProdutoCartesiano();
-      console.log(obterGruposPeloInput());
     });
-
-    // const btnEnviar = document.getElementById("btnEnviar");
-    // btnEnviar.addEventListener("click", calcularProdutoCartesiano);
-    // console.log(btnEnviar);
 
     function calcularProdutoCartesiano() {
       const gruposSelecionados = obterGruposPeloInput();
 
-      // Obter números específicos do campo de entrada onde era números especificos vai se chamar excluirJogos
-      const excluirJogosInput = document.getElementById("excluirJogos");
-      const excluirJogosTexto = excluirJogosInput.value;
-
-      // Divida a entrada do usuário em uma matriz de números
-      const excluirJogos = excluirJogosTexto
-        .split(",")
-        .map((numero) => parseInt(numero.trim(), 10))
-        .filter((numero) => !isNaN(numero));
+      // Obter números a serem excluídos
+      numerosExcluir = obterNumerosExcluir();
+      console.log(
+        "numerosExcluir dentro de calcularProdutoCartesiano:",
+        numerosExcluir
+      );
 
       // Mapeia as letras dos grupos para os arrays correspondentes
-      const arraysSelecionados = gruposSelecionados.map(
-        (letra) => grupos[letra.charCodeAt(0) - "A".charCodeAt(0)]
+      const arraysSelecionados = gruposSelecionados.map((letra) =>
+        gruposFrequencia[letra.charCodeAt(0) - "A".charCodeAt(0)].sort(
+          (a, b) => a - b
+        )
       );
 
-      //Chama a função produtoCartesiano com os arrays correspondentes aos grupos
+      // Chama a função produtoCartesiano com os arrays correspondentes aos grupos
       const resultado = produtoCartesiano(...arraysSelecionados) || [];
+      console.log("resultado antes da exclusão:", resultado);
 
-      //   // Chama a função produtoCartesiano com os arrays correspondentes aos grupos
-      //   const resultado = produtoCartesianoLimite(...arraysSelecionados) || [];
-
-      // Exclui arrays com números específicos
-      const resultadoGruposExcluidos = filtrarResultadoComNumerosEspecificos(
+      const resultadoGruposExcluidos = excluirArraysComNumerosEspecificos(
         resultado,
-        excluirJogos
+        numerosExcluir
       );
+      console.log("resultado após a exclusão:", resultadoGruposExcluidos);
 
-      const numerosExcluir = obterNumerosExcluir();
-
-      //   // Exibe o resultado na div com o id "resultado"
-      //   const divResultado = document.getElementById("resultado");
-      //   divResultado.textContent = `Resultado: ${resultadoGruposExcluidos.join(", ")}`;
-      // }
-
-      // function exibirResultado(resultado) {
-      //   const divResultado = document.getElementById("resultado");
-      //   divResultado.innerHTML = "";
-
-      //   const resultadoContainer = document.createElement("div");
-      //   resultadoContainer.id = "resultadoContainer";
-      //   divResultado.appendChild(resultadoContainer);
-
-      //   resultado.forEach((grupo, indice) => {
-      //     const divGrupo = document.createElement("div");
-      //     divGrupo.id = "futurosjogosMegaSena";
-      //     divGrupo.classList.add("resultadoGrupo");
-
-      //     const letraGrupo = obterLetraDoIndice(indice);
-      //     const spanLetra = document.createElement("span");
-      //     spanLetra.textContent = `jogo ${indice + 1}: `;
-      //     divGrupo.appendChild(spanLetra);
-
-      //     grupo.forEach((numero, numeroIndex) => {
-      //       const spanNumero = document.createElement("span");
-      //       spanNumero.textContent = numero;
-      //       if (numeroIndex !== grupo.length - 1) {
-      //         const spanSeparador = document.createElement("span");
-      //         spanSeparador.textContent = ", ";
-      //         divGrupo.appendChild(spanNumero);
-      //         divGrupo.appendChild(spanSeparador);
-      //       } else {
-      //         divGrupo.appendChild(spanNumero);
-      //       }
-      //     });
-
-      //     resultadoContainer.appendChild(divGrupo);
-      //   });
-      // }
-
-      // // Exibe o resultado filtrado
-      // console.log(resultadoFiltrado);
+      // Exibe o resultado na div com o id "resultado"
+      const divResultado = document.getElementById("resultado");
+      divResultado.textContent = `Resultado: ${resultadoGruposExcluidos.join(
+        ", "
+      )}`;
+      console.log(resultadoGruposExcluidos);
     }
   }
   execute();
 });
+
+
+
+gruposCorrelacionads 
+
+A: (7) ['10', '53', '5', '37', '23', '34', Array(7)]
+B: (6) ['33', '30', '41', '32', '35', Array(6)]
+C: (6) ['44', '42', '38', '4', '17', '28']
+D: (5) ['56', '27', '43', '29', '11']
+[[Prototype]]
+: 
+Object
+scripts.js:341 gruposCorrelacionadosReorganizados 
+{0: Array(7), 1: Array(6), 2: Array(6), 3: Array(5)}
+scripts.js:350 grupo para Processamento 
+{A: Array(5), B: Array(6), C: Array(6), D: Array(5)}
+A
+: 
+(5) ['53', '5', '37', '23', '34']
+B
+: 
+(6) ['33', '30', '41', '32', '35', Array(6)]
+C
+: 
+(6) ['44', '42', '38', '4', '17', '28']
+D
+: 
+(5) ['56', '27', '43', '29', '11']
+[[Prototype]]
+: 
+Object
