@@ -97,6 +97,26 @@ main {
   margin: 10px;
 }
 
+.grupo-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    3,
+    1fr
+  ); /* Largura igual para os primeiros 3 grupos */
+  gap: 16px;
+}
+
+.grupo-item {
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin-bottom: 16px;
+  text-align: center;
+  display: flex; /* Torna o grupo-item um contêiner flexível */
+  flex-direction: column; /* Empilha os elementos verticalmente */
+  justify-content: center; /* Centraliza os elementos verticalmente */
+  align-items: center; /* Centraliza os elementos horizontalmente */
+}
+
 main > section > div > h2 {
   color: var(--color-one);
   text-align: center;
@@ -203,5 +223,8 @@ td {
   main {
     display: flex;
     flex-direction: column;
+  }
+  .grupo-grid {
+    grid-template-columns: 1fr; /* 1 coluna para telas menores */
   }
 }
