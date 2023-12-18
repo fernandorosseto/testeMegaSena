@@ -39,42 +39,42 @@
               name="primeroGrupo"
               id="primeiroGrupo"
               maxlength="1"
-              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '');focusNext(this, 'segundoGrupo')"
               required />
             <input
               type="text"
               name="segundoGrupo"
               id="segundoGrupo"
               maxlength="1"
-              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '');focusNext(this, 'terceiroGrupo')"
               required />
             <input
               type="text"
               name="terceiroGrupo"
               id="terceiroGrupo"
               maxlength="1"
-              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '');focusNext(this, 'quartoGrupo')"
               required />
             <input
               type="text"
               name="quartoGrupo"
               id="quartoGrupo"
               maxlength="1"
-              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '');focusNext(this, 'quintoGrupo')"
               required />
             <input
               type="text"
               name="quintoGrupo"
               id="quintoGrupo"
               maxlength="1"
-              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '');focusNext(this, 'sextoGrupo')"
               required />
             <input
               type="text"
               name="sextoGrupo"
               id="sextoGrupo"
               maxlength="1"
-              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '')"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '');focusNext(this, 'excluirJogos')"
               required />
             <input
               type="text"
@@ -83,6 +83,20 @@
               value=""
               oninput="this.value = this.value.replace(/[^0-9,]/g, '')" />
           </form>
+          <script>
+            function focusNext(currentInput, nextInputId) {
+              const maxLength = 1;
+              const inputValue = currentInput.value;
+
+              if (inputValue.length === maxLength) {
+                const nextInput = document.getElementById(nextInputId);
+
+                if (nextInput) {
+                  nextInput.focus();
+                }
+              }
+            }
+          </script>
           <button class="btn" id="btnEnviar">Enviar</button>
           <!-- Resultado será exibido aqui -->
           <div id="resultado"></div>

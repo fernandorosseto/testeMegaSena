@@ -481,6 +481,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // }
 
   // função assincrona para execução das outras funções
+
   async function execute() {
     await frequenciaNumeros();
     exibirGrupos();
@@ -495,6 +496,7 @@ document.addEventListener("DOMContentLoaded", function () {
         gruposCorrelacionados,
         numerosExcluir
       );
+
       console.log("grupo para Processamento", gruposParaProcessamento);
       // Extrai os arrays dos valores do objeto
       const arraysGruposParaProcessamento = Object.values(
