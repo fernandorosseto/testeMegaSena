@@ -101,17 +101,17 @@ main {
 .grupo-grid {
   margin-top: 20px;
   display: grid;
-  grid-template-columns: repeat(
-    3,
-    1fr
-  ); /* Largura igual para os primeiros 3 grupos */
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+.grupo-grid > div:nth-child(n + 4) {
+  grid-column: span 3; /* Faz com que os elementos a partir do quarto ocupem 3 colunas */
 }
 
 .grupo-item {
   border: 1px solid #ccc;
-  padding: 8px;
-  margin-bottom: 16px;
+  padding: 5px;
+  margin-bottom: 5px;
   text-align: center;
   display: flex; /* Torna o grupo-item um contêiner flexível */
   flex-direction: column; /* Empilha os elementos verticalmente */
