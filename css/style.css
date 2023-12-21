@@ -132,7 +132,8 @@ main > section > div > h2 {
   gap: 10px; /* Espaçamento entre os inputs */
   justify-content: center;
 }
-#excluirJogos {
+#excluirJogos,
+#inputGrupoAtraso {
   grid-column: span 6;
   width: 100%;
 }

@@ -74,8 +74,14 @@
               name="sextoGrupo"
               id="sextoGrupo"
               maxlength="1"
-              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '');focusNext(this, 'excluirJogos')"
+              oninput="this.value = this.value.replace(/[^A-Ja-j]/g, '');focusNext(this, 'inputGrupoAtraso')"
               required />
+            <input
+              type="text"
+              id="inputGrupoAtraso"
+              placeholder="Grupo Atraso."
+              value=""
+              oninput="this.value = this.value.replace(/[^0-9,]/g, '')" />
             <input
               type="text"
               id="excluirJogos"

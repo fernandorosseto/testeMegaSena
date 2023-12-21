@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", function () {
   var url =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYOEs4QM-0kKjx1NPpj9LfAHWcNGSikmC5EKSBs9NUkZCG8usYOcz5bjelCJRhEUBtvFlSAr8nRDv5/pub?gid=0&single=true&output=csv";
 
+  // Criar um objeto para armazenar as arrays com base no tamanho
+  let arraysAgrupadasPorTamanho = {};
+
   async function planilhaDb() {
     const response = await fetch(url);
     const data = await response.text();
@@ -19,9 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       return dezenas;
     });
-
-    // Criar um objeto para armazenar as arrays com base no tamanho
-    const arraysAgrupadasPorTamanho = {};
 
     for (let i = 1; i <= 6; i++) {
       arraysAgrupadasPorTamanho[i] = [];
@@ -66,9 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
       arraysAgrupadasPorTamanho[tamanho].push(array);
     });
 
-    // Imprimir o objeto resultante
-    console.log(arraysAgrupadasPorTamanho);
-
     function exibirGruposAtraso() {
       const divGrupoAtraso = document.getElementById("grupoAtraso");
       divGrupoAtraso.innerHTML = "";
@@ -88,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           // Adiciona o número do grupo
           const grupoNumero = document.createElement("div");
-          grupoNumero.textContent = `Grupo ${tamanho}`;
+          grupoNumero.textContent = `Grupo ${tamanho},`;
           grupoDiv.appendChild(grupoNumero);
 
           // Adiciona cada número do grupo em células individuais
@@ -109,9 +106,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Chama a função para exibir os grupos no HTML
     exibirGruposAtraso();
+    return arraysAgrupadasPorTamanho;
   }
-
-  planilhaDb();
 
   //----------------------------------------------------------------------------------------------------------
   // Pegar os dados das frequências de cada número disponíveis numa planilha do google sheets.
@@ -218,7 +214,6 @@ document.addEventListener("DOMContentLoaded", function () {
     resultadoGrupos = distribuirDezenas(pagina2Data);
     console.log(resultadoGrupos);
   }
-  frequenciaNumeros();
 
   //Nomeando os grupos no front-end com base nos índices, A para o resultadoGrupos[0], até o J para o resultadoGrupos[9]
   function obterLetraDoIndice(indice) {
@@ -303,6 +298,53 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Função que recebe os valores digitados pelo usuário no input excluirJogos
+  function obterNumerosGrupoAtraso() {
+    const numerosGrupoAtraso = document.getElementById("inputGrupoAtraso");
+
+    // Verifica se o elemento existe antes de acessar a propriedade value
+    if (numerosGrupoAtraso) {
+      const numerosGrupoAtrasoTexto = numerosGrupoAtraso.value;
+
+      // Verifica se a string não está vazia antes de dividir
+      if (numerosGrupoAtrasoTexto.trim() !== "") {
+        // Divida a entrada do usuário em uma matriz de números
+        const numerosGrupoAtrasoArray = numerosGrupoAtrasoTexto
+          .split(",")
+          .map((numero) => parseInt(numero.trim(), 10))
+          .filter((numero) => !isNaN(numero));
+
+        return numerosGrupoAtrasoArray;
+      }
+    }
+
+    // Se o elemento não existe ou a string está vazia, retorna uma matriz vazia
+    return [];
+  }
+
+  function obterGruposAtrasoCorrelacionados() {
+    const gruposInputAtraso = obterNumerosGrupoAtraso();
+    const correlacaoGrupoAtraso = {};
+
+    gruposInputAtraso.forEach((indice) => {
+      const indiceGrupo = indice;
+
+      let nomeGrupo = `Grupo Atraso ${indice}`;
+
+      // Verifique se a chave já existe no objeto
+      while (correlacaoGrupoAtraso[nomeGrupo]) {
+        // Se existir, adicione um sufixo incremental ao nome para permitir duplicidades
+        const numeroSufixo = parseInt(nomeGrupo.slice(13)) || 1;
+        nomeGrupo = `Grupo Atraso ${numeroSufixo + 1}`;
+      }
+
+      // Crie uma cópia do grupo correspondente e atribua ao nome atualizado
+      correlacaoGrupoAtraso[nomeGrupo] = arraysAgrupadasPorTamanho[indiceGrupo];
+    });
+
+    return correlacaoGrupoAtraso;
+  }
+
+  // Função que recebe os valores digitados pelo usuário no input excluirJogos
   function obterNumerosExcluir() {
     const numerosExcluirInput = document.getElementById("excluirJogos");
 
@@ -350,6 +392,46 @@ document.addEventListener("DOMContentLoaded", function () {
     return correlacao;
   }
 
+  function filtrarElementosComuns(objeto1, objeto2) {
+    const objetoComum = {};
+
+    // Extrair todos os elementos de objeto1 para um array
+    const elementosObjeto1 = Object.values(objeto1).reduce(
+      (acc, subarrays) =>
+        acc.concat(
+          subarrays.reduce(
+            (innerAcc, numero) => innerAcc.concat(numero.map(String)),
+            []
+          )
+        ),
+      []
+    );
+
+    for (const chave2 in objeto2) {
+      if (objeto2.hasOwnProperty(chave2)) {
+        objetoComum[chave2] = objeto2[chave2].filter((valor2) =>
+          elementosObjeto1.some(
+            (elemento1) => Number(elemento1) === Number(valor2)
+          )
+        );
+      }
+    }
+
+    // Filtrar chaves com arrays não vazias
+    let objetoComumFiltrado = Object.fromEntries(
+      Object.entries(objetoComum).filter(
+        ([chave, valores]) => valores.length > 0
+      )
+    );
+
+    // Verificar se há menos de 6 chaves e exibir um alerta de erro
+    if (Object.keys(objetoComumFiltrado).length < 6) {
+      alert("Erro: Menos de 6 chaves encontradas em objetoComumFiltrado.");
+    }
+
+    return objetoComumFiltrado;
+  }
+
   // Essa função irá pegar o return da função obterGruposCorrelacionados e excluir os números que o usuário irá digitar no input excluirJogos
   function excluirNumerosCorrelacionados(correlacao, numerosExcluir) {
     const gruposExcluidos = { ...correlacao }; // Cria uma cópia dos grupos correlacionados
@@ -387,6 +469,13 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       [[]]
     );
+    if (todasAsCombinações.length < 6) {
+      alert(
+        "Não há números suficientes para formar pelo menos um jogo com 6 dezenas."
+      );
+    }
+
+    return todasAsCombinações;
   }
 
   // Função para verificar se há números iguais em uma array
@@ -484,20 +573,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function execute() {
     await frequenciaNumeros();
+    const arraysAgrupadasPorTamanho = await planilhaDb();
+    // Imprimir o objeto resultante
+    console.log("array organizada por tamanho", arraysAgrupadasPorTamanho);
     exibirGrupos();
 
     //Botão para enviar os dados do HTML para o JS e executar todas as operações
     const btnEnviar = document.getElementById("btnEnviar");
     btnEnviar.addEventListener("click", function () {
       const gruposCorrelacionados = obterGruposCorrelacionados();
-      console.log("gruposCorrelacionads", gruposCorrelacionados);
+      //console.log("gruposCorrelacionads", gruposCorrelacionados);
+      const grupoAtraso = obterNumerosGrupoAtraso();
+      //console.log("grupoAtraso", grupoAtraso);
+      const grupoAtrasoCorrelacionado = obterGruposAtrasoCorrelacionados();
+      console.log("grupo atraso correlacionado", grupoAtrasoCorrelacionado);
+
+      //Números para excluir
       const numerosExcluir = obterNumerosExcluir();
+
+      const meuObjetoAtraso = grupoAtrasoCorrelacionado;
+      //console.log("meu Objeto", meuObjeto);
+      const meuObjetoFrequencia = gruposCorrelacionados;
+      //console.log("Meu objeto 2", meuObjetoDois);
+
+      const resultadoFiltrado = filtrarElementosComuns(
+        meuObjetoAtraso,
+        meuObjetoFrequencia
+      );
+      console.log(
+        "resultado filtro entre grupo Frequencia e Atraso",
+        resultadoFiltrado
+      );
+
       const gruposParaProcessamento = excluirNumerosCorrelacionados(
-        gruposCorrelacionados,
+        resultadoFiltrado,
         numerosExcluir
       );
 
-      console.log("grupo para Processamento", gruposParaProcessamento);
+      //console.log("grupo para Processamento", gruposParaProcessamento);
       // Extrai os arrays dos valores do objeto
       const arraysGruposParaProcessamento = Object.values(
         gruposParaProcessamento
@@ -505,6 +618,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Filtra apenas os arrays válidos
       const gruposValidos = arraysGruposParaProcessamento.filter(Array.isArray);
+      console.log("grupos válidos", gruposValidos);
 
       //Chama a função produtoCartesiano
       const gruposValidosParaProcessar = produtoCartesiano(...gruposValidos);
@@ -515,8 +629,7 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
       // Imprime o resultado
-      console.log("Proximos Jogos Mega Sena:", proximosJogosMegaSena);
-      // exibirNumerosNaTabela(proximosJogosMegaSena);
+      //console.log("Proximos Jogos Mega Sena:", proximosJogosMegaSena);
       exibirNumerosNaNovaGuia(proximosJogosMegaSena);
 
       // const dadosParaDownload = proximosJogosMegaSena.map((comb) => ({
