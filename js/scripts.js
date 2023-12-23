@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Criar um objeto para armazenar as arrays com base no tamanho
   let arraysAgrupadasPorTamanho = {};
+  let numerosFiltradosAtraso = {};
 
   async function planilhaDb() {
     const response = await fetch(url);
@@ -118,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
   //gid pag2 1007340004
   //gid pag4 4064556
   let pagina2Data;
-  let resultadoGrupos;
+  let resultadoNumerico;
 
   // Função responsável por receber os dados da urlPagina2 e distribuir as dezenas da mega sena em três grupos
   async function frequenciaNumeros() {
@@ -211,8 +212,11 @@ document.addEventListener("DOMContentLoaded", function () {
       return gruposFrequencia;
     }
 
-    resultadoGrupos = distribuirDezenas(pagina2Data);
-    console.log(resultadoGrupos);
+    const resultadoGrupos = distribuirDezenas(pagina2Data);
+    resultadoNumerico = resultadoGrupos.map((grupo) =>
+      grupo.map((elemento) => Number(elemento))
+    );
+    console.log(resultadoNumerico);
   }
 
   //Nomeando os grupos no front-end com base nos índices, A para o resultadoGrupos[0], até o J para o resultadoGrupos[9]
@@ -235,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const tabela = document.createElement("table");
 
     // Adiciona os grupos à tabela
-    resultadoGrupos.forEach((grupo, indice) => {
+    resultadoNumerico.forEach((grupo, indice) => {
       const row = tabela.insertRow(-1);
 
       // Adiciona o número do grupo em uma célula
@@ -386,119 +390,124 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Crie uma cópia do grupo correspondente e atribua ao nome atualizado
-      correlacao[nomeGrupo] = resultadoGrupos[indiceGrupo].slice();
+      correlacao[nomeGrupo] = resultadoNumerico[indiceGrupo].slice();
     });
 
     return correlacao;
   }
 
-  function filtrarElementosComuns(objeto1, objeto2) {
-    const objetoComum = {};
+  // function filtrarElementosComuns(objeto1, objeto2) {
+  //   const objetoComum = {};
 
-    // Extrair todos os elementos de objeto1 para um array
-    const elementosObjeto1 = Object.values(objeto1).reduce(
-      (acc, subarrays) =>
-        acc.concat(
-          subarrays.reduce(
-            (innerAcc, numero) => innerAcc.concat(numero.map(String)),
-            []
-          )
-        ),
-      []
-    );
+  //   // Extrair todos os elementos de objeto1 para um array
+  //   const elementosObjeto1 = Object.values(objeto1).reduce(
+  //     (acc, subarrays) =>
+  //       acc.concat(
+  //         subarrays.reduce(
+  //           (innerAcc, numero) => innerAcc.concat(numero.map(String)),
+  //           []
+  //         )
+  //       ),
+  //     []
+  //   );
 
-    for (const chave2 in objeto2) {
-      if (objeto2.hasOwnProperty(chave2)) {
-        objetoComum[chave2] = objeto2[chave2].filter((valor2) =>
-          elementosObjeto1.some(
-            (elemento1) => Number(elemento1) === Number(valor2)
-          )
-        );
-      }
-    }
+  //   for (const chave2 in objeto2) {
+  //     if (objeto2.hasOwnProperty(chave2)) {
+  //       objetoComum[chave2] = objeto2[chave2].filter((valor2) =>
+  //         elementosObjeto1.some(
+  //           (elemento1) => Number(elemento1) === Number(valor2)
+  //         )
+  //       );
+  //     }
+  //   }
 
-    // Filtrar chaves com arrays não vazias
-    let objetoComumFiltrado = Object.fromEntries(
-      Object.entries(objetoComum).filter(
-        ([chave, valores]) => valores.length > 0
-      )
-    );
+  //   // Filtrar chaves com arrays não vazias
+  //   let objetoComumFiltrado = Object.fromEntries(
+  //     Object.entries(objetoComum).filter(
+  //       ([chave, valores]) => valores.length > 0
+  //     )
+  //   );
 
-    // Verificar se há menos de 6 chaves e exibir um alerta de erro
-    if (Object.keys(objetoComumFiltrado).length < 6) {
-      alert("Erro: Menos de 6 chaves encontradas em objetoComumFiltrado.");
-    }
+  //   // Verificar se há menos de 6 chaves e exibir um alerta de erro
+  //   if (Object.keys(objetoComumFiltrado).length < 6) {
+  //     alert("Erro: Menos de 6 chaves encontradas em objetoComumFiltrado.");
+  //   }
 
-    return objetoComumFiltrado;
-  }
+  //   return objetoComumFiltrado;
+  // }
 
   // Essa função irá pegar o return da função obterGruposCorrelacionados e excluir os números que o usuário irá digitar no input excluirJogos
-  function excluirNumerosCorrelacionados(correlacao, numerosExcluir) {
-    const gruposExcluidos = { ...correlacao }; // Cria uma cópia dos grupos correlacionados
+  function excluirNumerosCorrelacionados(
+    numerosExcluir,
+    numerosFiltradosAtraso
+  ) {
+    const gruposExcluidos = { ...numerosFiltradosAtraso }; // Cria uma cópia dos grupos correlacionados
 
     for (const letra in gruposExcluidos) {
-      gruposExcluidos[letra] = gruposExcluidos[letra].filter(
-        (numero) => !numerosExcluir.includes(parseInt(numero, 10))
+      gruposExcluidos[letra] = gruposExcluidos[letra].map((numeros) =>
+        numeros.filter(
+          (numero) => !numerosExcluir.includes(parseInt(numero, 10))
+        )
       );
     }
 
     return gruposExcluidos;
   }
 
-  // Realiza o calculo de protudo cartesiano
-  function produtoCartesiano(...conjuntos) {
-    return conjuntos.reduce(
-      (acumulador, conjuntoAtual) => {
-        const novoAcumulador = [];
-        acumulador.forEach((elementoAcumulado) => {
-          // Verifica se conjuntoAtual é um array antes de chamar forEach
-          if (Array.isArray(conjuntoAtual)) {
-            conjuntoAtual.forEach((elementoConjuntoAtual) => {
-              const novaCombinação = [
-                ...elementoAcumulado,
-                elementoConjuntoAtual,
-              ];
-              // Verifica se há números iguais na nova combinação
-              if (!temNumerosIguais(novaCombinação)) {
-                novoAcumulador.push(novaCombinação);
-              }
-            });
-          }
-        });
-        return novoAcumulador;
-      },
-      [[]]
-    );
-    if (todasAsCombinações.length < 6) {
-      alert(
-        "Não há números suficientes para formar pelo menos um jogo com 6 dezenas."
-      );
-    }
+  // // Realiza o calculo de protudo cartesiano
+  // function produtoCartesiano(...conjuntos) {
+  //   return conjuntos.reduce(
+  //     (acumulador, conjuntoAtual) => {
+  //       const novoAcumulador = [];
+  //       acumulador.forEach((elementoAcumulado) => {
+  //         // Verifica se conjuntoAtual é um array antes de chamar forEach
+  //         if (Array.isArray(conjuntoAtual)) {
+  //           conjuntoAtual.forEach((elementoConjuntoAtual) => {
+  //             const novaCombinação = [
+  //               ...elementoAcumulado,
+  //               elementoConjuntoAtual,
+  //             ];
+  //             // Verifica se há números iguais na nova combinação
+  //             if (!temNumerosIguais(novaCombinação)) {
+  //               novoAcumulador.push(novaCombinação);
+  //             }
+  //           });
+  //         }
+  //       });
+  //       return novoAcumulador;
+  //     },
+  //     [[]]
+  //   );
+  //   if (todasAsCombinações.length < 6) {
+  //     alert(
+  //       "Não há números suficientes para formar pelo menos um jogo com 6 dezenas."
+  //     );
+  //   }
 
-    return todasAsCombinações;
-  }
+  //   return todasAsCombinações;
+  // }
 
-  // Função para verificar se há números iguais em uma array
-  function temNumerosIguais(array) {
-    const conjuntoUnico = new Set(array);
-    return array.length !== conjuntoUnico.size;
-  }
-  // função para manter apenas jogos únicos. Ex. grupo 1, 2, 3 e 1, 3, 2, são considerados grupos diferentes em produto cartesiano, o código ordena os jogos e depois mantém apenas um jogo.
-  function removerJogosDuplicados(jogos) {
-    const jogosUnicos = [];
-    const jogosVistos = new Set();
+  // // Função para verificar se há números iguais em uma array
+  // function temNumerosIguais(array) {
+  //   const conjuntoUnico = new Set(array);
+  //   return array.length !== conjuntoUnico.size;
+  // }
+  // // função para manter apenas jogos únicos. Ex. grupo 1, 2, 3 e 1, 3, 2, são considerados grupos diferentes em produto cartesiano, o código ordena os jogos e depois mantém apenas um jogo.
+  // function removerJogosDuplicados(jogos) {
+  //   const jogosUnicos = [];
+  //   const jogosVistos = new Set();
 
-    for (const jogo of jogos) {
-      // Ordena os números do jogo para garantir consistência
-      const jogoOrdenado = [...jogo].sort().join(",");
+  //   for (const jogo of jogos) {
+  //     // Ordena os números do jogo para garantir consistência
+  //     const jogoOrdenado = [...jogo].sort().join(",");
 
-      if (!jogosVistos.has(jogoOrdenado)) {
-        jogosVistos.add(jogoOrdenado);
-        jogosUnicos.push(jogo);
-      }
-    }
-    return jogosUnicos;
-  }
+  //     if (!jogosVistos.has(jogoOrdenado)) {
+  //       jogosVistos.add(jogoOrdenado);
+  //       jogosUnicos.push(jogo);
+  //     }
+  //   }
+  //   return jogosUnicos;
+  // }
 
   // function exibirNumerosNaTabela(numeros) {
   //   // Selecione o elemento com o ID "resultado"
@@ -575,7 +584,7 @@ document.addEventListener("DOMContentLoaded", function () {
     await frequenciaNumeros();
     const arraysAgrupadasPorTamanho = await planilhaDb();
     // Imprimir o objeto resultante
-    console.log("array organizada por tamanho", arraysAgrupadasPorTamanho);
+    //console.log("array organizada por tamanho", arraysAgrupadasPorTamanho);
     exibirGrupos();
 
     //Botão para enviar os dados do HTML para o JS e executar todas as operações
@@ -586,51 +595,131 @@ document.addEventListener("DOMContentLoaded", function () {
       const grupoAtraso = obterNumerosGrupoAtraso();
       //console.log("grupoAtraso", grupoAtraso);
       const grupoAtrasoCorrelacionado = obterGruposAtrasoCorrelacionados();
-      console.log("grupo atraso correlacionado", grupoAtrasoCorrelacionado);
+      //console.log("grupo atraso correlacionado", grupoAtrasoCorrelacionado);
 
       //Números para excluir
       const numerosExcluir = obterNumerosExcluir();
 
       const meuObjetoAtraso = grupoAtrasoCorrelacionado;
-      //console.log("meu Objeto", meuObjeto);
+      console.log("meuObjetoAtraso", meuObjetoAtraso);
       const meuObjetoFrequencia = gruposCorrelacionados;
-      //console.log("Meu objeto 2", meuObjetoDois);
+      console.log("meuObjetoFrequencia", meuObjetoFrequencia);
 
-      const resultadoFiltrado = filtrarElementosComuns(
+      const gruposFrequencia = Object.keys(meuObjetoFrequencia);
+
+      function filtrarNumerosPorGruposAtraso(atraso, gruposFrequencia) {
+        const numerosFiltrados = {};
+
+        for (const grupoAtraso in atraso) {
+          const numerosGrupoAtraso = atraso[grupoAtraso].flat();
+          const numerosFiltradosGrupo = [];
+
+          for (const grupoFrequencia of gruposFrequencia) {
+            const numerosGrupoFrequencia = meuObjetoFrequencia[grupoFrequencia];
+            const numerosComuns = numerosGrupoAtraso.filter((numero) =>
+              numerosGrupoFrequencia.includes(numero)
+            );
+
+            numerosFiltradosGrupo.push(numerosComuns);
+          }
+
+          numerosFiltrados[grupoAtraso] = numerosFiltradosGrupo;
+        }
+
+        return numerosFiltrados;
+      }
+
+      numerosFiltradosAtraso = filtrarNumerosPorGruposAtraso(
         meuObjetoAtraso,
-        meuObjetoFrequencia
+        gruposFrequencia
       );
-      console.log(
-        "resultado filtro entre grupo Frequencia e Atraso",
-        resultadoFiltrado
-      );
+      console.log("numerosFiltradosAtraso", numerosFiltradosAtraso);
+
+      function gerarCombinacoes(numerosFiltradosAtraso) {
+        const resultado = [];
+        const indices = Object.keys(numerosFiltradosAtraso);
+
+        function numeroJaEstaNaCombinacao(numero, combinacaoAtual) {
+          return combinacaoAtual.includes(numero);
+        }
+
+        function gerarCombinacaoRecursiva(indiceAtual, combinacaoAtual) {
+          if (combinacaoAtual.length === 6) {
+            resultado.push(combinacaoAtual.slice());
+            return;
+          }
+
+          if (indiceAtual === indices.length) {
+            return;
+          }
+
+          const grupoAtual = numerosFiltradosAtraso[indices[indiceAtual]] || [];
+          for (let i = 0; i < grupoAtual.length; i++) {
+            const elementoAtual = grupoAtual[i];
+
+            if (Array.isArray(elementoAtual)) {
+              for (const numero of elementoAtual) {
+                if (!numeroJaEstaNaCombinacao(numero, combinacaoAtual)) {
+                  combinacaoAtual.push(numero);
+                  gerarCombinacaoRecursiva(indiceAtual + 1, combinacaoAtual);
+                  combinacaoAtual.pop();
+                }
+              }
+            } else if (elementoAtual !== undefined) {
+              if (!numeroJaEstaNaCombinacao(elementoAtual, combinacaoAtual)) {
+                combinacaoAtual.push(elementoAtual);
+                gerarCombinacaoRecursiva(indiceAtual + 1, combinacaoAtual);
+                combinacaoAtual.pop();
+              }
+            }
+          }
+        }
+
+        gerarCombinacaoRecursiva(0, []);
+
+        return resultado;
+      }
 
       const gruposParaProcessamento = excluirNumerosCorrelacionados(
-        resultadoFiltrado,
-        numerosExcluir
+        numerosExcluir,
+        numerosFiltradosAtraso
       );
 
-      //console.log("grupo para Processamento", gruposParaProcessamento);
-      // Extrai os arrays dos valores do objeto
-      const arraysGruposParaProcessamento = Object.values(
-        gruposParaProcessamento
-      );
+      console.log("gruposParaProcessamento", gruposParaProcessamento);
 
-      // Filtra apenas os arrays válidos
-      const gruposValidos = arraysGruposParaProcessamento.filter(Array.isArray);
-      console.log("grupos válidos", gruposValidos);
+      const combinacoes = gerarCombinacoes(gruposParaProcessamento);
+      console.log(combinacoes);
 
-      //Chama a função produtoCartesiano
-      const gruposValidosParaProcessar = produtoCartesiano(...gruposValidos);
+      // const resultadoFiltrado = filtrarElementosComuns(
+      //   meuObjetoFrequencia,
+      //   meuObjetoAtraso
+      // );
+      // console.log(
+      //   "resultado filtro entre grupo Frequencia e Atraso",
+      //   resultadoFiltrado
+      // );
 
-      // Remover jogos duplicados
-      const proximosJogosMegaSena = removerJogosDuplicados(
-        gruposValidosParaProcessar
-      );
+      // //console.log("grupo para Processamento", gruposParaProcessamento);
+      // // Extrai os arrays dos valores do objeto
+      // const arraysGruposParaProcessamento = Object.values(
+      //   gruposParaProcessamento
+      // );
+
+      // // Filtra apenas os arrays válidos
+      // const gruposValidos = arraysGruposParaProcessamento.filter(Array.isArray);
+      // console.log("grupos válidos", gruposValidos);
+
+      // //Chama a função produtoCartesiano
+      // const gruposValidosParaProcessar = produtoCartesiano(...gruposValidos);
+
+      // // Remover jogos duplicados
+      // const proximosJogosMegaSena = removerJogosDuplicados(
+      //   gruposValidosParaProcessar
+      // );
 
       // Imprime o resultado
       //console.log("Proximos Jogos Mega Sena:", proximosJogosMegaSena);
-      exibirNumerosNaNovaGuia(proximosJogosMegaSena);
+      exibirNumerosNaNovaGuia(combinacoes);
 
       // const dadosParaDownload = proximosJogosMegaSena.map((comb) => ({
       //   Jogo: comb.join("\t"), // Separa os números por tabulação
