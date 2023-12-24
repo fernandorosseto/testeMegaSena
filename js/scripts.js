@@ -716,9 +716,81 @@ document.addEventListener("DOMContentLoaded", function () {
       // Remover jogos duplicados
       const proximosJogosMegaSena = removerJogosDuplicados(combinacoes);
 
+      function atendeRequisitos(jogo, meuObjetoFrequencia) {
+        const numerosPorGrupo = {};
+
+        // Inicializa a contagem de números por grupo
+        Object.keys(meuObjetoFrequencia).forEach((grupo) => {
+          numerosPorGrupo[grupo] = 0;
+        });
+
+        // Conta quantos números do grupo cada jogo contém
+        jogo.forEach((numero) => {
+          Object.keys(meuObjetoFrequencia).forEach((grupo) => {
+            if (
+              (grupo === "A" || grupo === "A2") &&
+              meuObjetoFrequencia[grupo].includes(numero)
+            ) {
+              if (numerosPorGrupo[grupo] < 1) {
+                numerosPorGrupo[grupo]++;
+              }
+            } else if (meuObjetoFrequencia[grupo].includes(numero)) {
+              numerosPorGrupo[grupo]++;
+            }
+          });
+        });
+
+        // Verifica se cada grupo tem exatamente um número
+        const atendeRequisitos = Object.values(numerosPorGrupo).every(
+          (count) => count === 1
+        );
+
+        // Adiciona mensagens de log
+        console.log("Jogo:", jogo);
+        console.log("Contagem por grupo:", numerosPorGrupo);
+        console.log("Atende requisitos:", atendeRequisitos);
+
+        return atendeRequisitos;
+      }
+
+      // function atendeRequisitos(jogo, meuObjetoFrequencia) {
+      //   const numerosPorGrupo = {};
+
+      //   // Inicializa a contagem de números por grupo
+      //   Object.keys(meuObjetoFrequencia).forEach((grupo) => {
+      //     numerosPorGrupo[grupo] = 0;
+      //   });
+
+      //   // Conta quantos números do grupo cada jogo contém
+      //   jogo.forEach((numero) => {
+      //     Object.keys(meuObjetoFrequencia).forEach((grupo) => {
+      //       if (meuObjetoFrequencia[grupo].includes(numero)) {
+      //         numerosPorGrupo[grupo]++;
+      //       }
+      //     });
+      //   });
+
+      //   // Verifica se cada grupo tem pelo menos um número
+      //   const atendeRequisitos = Object.values(numerosPorGrupo).every(
+      //     (count) => count >= 1
+      //   );
+
+      //   // Adiciona mensagens de log
+      //   console.log("Jogo:", jogo);
+      //   console.log("Contagem por grupo:", numerosPorGrupo);
+      //   console.log("Atende requisitos:", atendeRequisitos);
+
+      //   return atendeRequisitos;
+      // }
+
+      // Filtra os jogos que atendem aos requisitos
+      const jogosValidos = proximosJogosMegaSena.filter((jogo) =>
+        atendeRequisitos(jogo, meuObjetoFrequencia)
+      );
+
       // Imprime o resultado
       //console.log("Proximos Jogos Mega Sena:", proximosJogosMegaSena);
-      exibirNumerosNaNovaGuia(proximosJogosMegaSena);
+      exibirNumerosNaNovaGuia(jogosValidos);
 
       // const dadosParaDownload = proximosJogosMegaSena.map((comb) => ({
       //   Jogo: comb.join("\t"), // Separa os números por tabulação
