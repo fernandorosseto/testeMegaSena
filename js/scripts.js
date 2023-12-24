@@ -492,22 +492,23 @@ document.addEventListener("DOMContentLoaded", function () {
   //   const conjuntoUnico = new Set(array);
   //   return array.length !== conjuntoUnico.size;
   // }
-  // // função para manter apenas jogos únicos. Ex. grupo 1, 2, 3 e 1, 3, 2, são considerados grupos diferentes em produto cartesiano, o código ordena os jogos e depois mantém apenas um jogo.
-  // function removerJogosDuplicados(jogos) {
-  //   const jogosUnicos = [];
-  //   const jogosVistos = new Set();
 
-  //   for (const jogo of jogos) {
-  //     // Ordena os números do jogo para garantir consistência
-  //     const jogoOrdenado = [...jogo].sort().join(",");
+  // função para manter apenas jogos únicos. Ex. grupo 1, 2, 3 e 1, 3, 2, são considerados grupos diferentes em produto cartesiano, o código ordena os jogos e depois mantém apenas um jogo.
+  function removerJogosDuplicados(jogos) {
+    const jogosUnicos = [];
+    const jogosVistos = new Set();
 
-  //     if (!jogosVistos.has(jogoOrdenado)) {
-  //       jogosVistos.add(jogoOrdenado);
-  //       jogosUnicos.push(jogo);
-  //     }
-  //   }
-  //   return jogosUnicos;
-  // }
+    for (const jogo of jogos) {
+      // Ordena os números do jogo para garantir consistência
+      const jogoOrdenado = [...jogo].sort().join(",");
+
+      if (!jogosVistos.has(jogoOrdenado)) {
+        jogosVistos.add(jogoOrdenado);
+        jogosUnicos.push(jogo);
+      }
+    }
+    return jogosUnicos;
+  }
 
   // function exibirNumerosNaTabela(numeros) {
   //   // Selecione o elemento com o ID "resultado"
@@ -712,14 +713,12 @@ document.addEventListener("DOMContentLoaded", function () {
       // //Chama a função produtoCartesiano
       // const gruposValidosParaProcessar = produtoCartesiano(...gruposValidos);
 
-      // // Remover jogos duplicados
-      // const proximosJogosMegaSena = removerJogosDuplicados(
-      //   gruposValidosParaProcessar
-      // );
+      // Remover jogos duplicados
+      const proximosJogosMegaSena = removerJogosDuplicados(combinacoes);
 
       // Imprime o resultado
       //console.log("Proximos Jogos Mega Sena:", proximosJogosMegaSena);
-      exibirNumerosNaNovaGuia(combinacoes);
+      exibirNumerosNaNovaGuia(proximosJogosMegaSena);
 
       // const dadosParaDownload = proximosJogosMegaSena.map((comb) => ({
       //   Jogo: comb.join("\t"), // Separa os números por tabulação
