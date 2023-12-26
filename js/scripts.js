@@ -714,35 +714,73 @@ document.addEventListener("DOMContentLoaded", function () {
       // const gruposValidosParaProcessar = produtoCartesiano(...gruposValidos);
 
       // Remover jogos duplicados
-      const proximosJogosMegaSena = removerJogosDuplicados(combinacoes);
+      const resultadoJogosUnicos = removerJogosDuplicados(combinacoes);
+      console.log("resultadosunicos", resultadoJogosUnicos);
+
+      // function atendeRequisitos(jogo, meuObjetoFrequencia) {
+      //   const numerosPorGrupo = {};
+
+      //   // Inicializa a contagem de números por grupo
+      //   Object.keys(meuObjetoFrequencia).forEach((grupo) => {
+      //     numerosPorGrupo[grupo] = [];
+      //   });
+
+      //   // Conta quantos números do grupo cada jogo contém
+      //   jogo.forEach((numero) => {
+      //     Object.keys(meuObjetoFrequencia).forEach((grupo) => {
+      //       if (meuObjetoFrequencia[grupo].includes(numero)) {
+      //         if (
+      //           numerosPorGrupo[grupo].length <
+      //           meuObjetoFrequencia[grupo].length
+      //         ) {
+      //           numerosPorGrupo[grupo].push(numero);
+      //         }
+      //       }
+      //     });
+      //   });
+
+      //   // Verifica se cada grupo tem exatamente a quantidade certa de números
+      //   const atendeRequisitos = Object.keys(numerosPorGrupo).every((grupo) => {
+      //     const quantidadeChaves = meuObjetoFrequencia[grupo].length;
+      //     return numerosPorGrupo[grupo].length === quantidadeChaves;
+      //   });
+
+      //   // Adiciona mensagens de log
+      //   console.log("Jogo:", jogo);
+      //   console.log("Contagem por grupo:", numerosPorGrupo);
+      //   console.log("Atende requisitos:", atendeRequisitos);
+
+      //   return atendeRequisitos;
+      // }
 
       function atendeRequisitos(jogo, meuObjetoFrequencia) {
+        // Inicializa um objeto para contar quantos números de cada grupo estão no jogo
         const numerosPorGrupo = {};
 
-        // Inicializa a contagem de números por grupo
+        // Conta quantas vezes cada grupo aparece no objeto de frequência
+        const contagemChavesIguais = {};
         Object.keys(meuObjetoFrequencia).forEach((grupo) => {
-          numerosPorGrupo[grupo] = 0;
+          const chave = meuObjetoFrequencia[grupo].toString();
+          contagemChavesIguais[chave] = (contagemChavesIguais[chave] || 0) + 1;
+          numerosPorGrupo[grupo] = 0; // Inicializa a contagem para cada grupo
         });
 
         // Conta quantos números do grupo cada jogo contém
         jogo.forEach((numero) => {
           Object.keys(meuObjetoFrequencia).forEach((grupo) => {
-            if (
-              (grupo === "A" || grupo === "A2") &&
-              meuObjetoFrequencia[grupo].includes(numero)
-            ) {
-              if (numerosPorGrupo[grupo] < 1) {
-                numerosPorGrupo[grupo]++;
-              }
-            } else if (meuObjetoFrequencia[grupo].includes(numero)) {
+            if (meuObjetoFrequencia[grupo].includes(numero)) {
+              // Incrementa a contagem para o grupo atual
               numerosPorGrupo[grupo]++;
             }
           });
         });
 
-        // Verifica se cada grupo tem exatamente um número
-        const atendeRequisitos = Object.values(numerosPorGrupo).every(
-          (count) => count === 1
+        // Verifica se cada grupo tem a quantidade correta de números no jogo
+        const atendeRequisitos = Object.keys(meuObjetoFrequencia).every(
+          (grupo) => {
+            const chave = meuObjetoFrequencia[grupo].toString();
+            return numerosPorGrupo[grupo] === contagemChavesIguais[chave];
+          }
         );
 
         // Adiciona mensagens de log
@@ -764,15 +802,22 @@ document.addEventListener("DOMContentLoaded", function () {
       //   // Conta quantos números do grupo cada jogo contém
       //   jogo.forEach((numero) => {
       //     Object.keys(meuObjetoFrequencia).forEach((grupo) => {
-      //       if (meuObjetoFrequencia[grupo].includes(numero)) {
+      //       if (
+      //         (grupo === "A" || grupo === "A2") &&
+      //         meuObjetoFrequencia[grupo].includes(numero)
+      //       ) {
+      //         if (numerosPorGrupo[grupo] < 1) {
+      //           numerosPorGrupo[grupo]++;
+      //         }
+      //       } else if (meuObjetoFrequencia[grupo].includes(numero)) {
       //         numerosPorGrupo[grupo]++;
       //       }
       //     });
       //   });
 
-      //   // Verifica se cada grupo tem pelo menos um número
+      //   // Verifica se cada grupo tem exatamente um número
       //   const atendeRequisitos = Object.values(numerosPorGrupo).every(
-      //     (count) => count >= 1
+      //     (count) => count === 1
       //   );
 
       //   // Adiciona mensagens de log
@@ -784,7 +829,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // }
 
       // Filtra os jogos que atendem aos requisitos
-      const jogosValidos = proximosJogosMegaSena.filter((jogo) =>
+      const jogosValidos = resultadoJogosUnicos.filter((jogo) =>
         atendeRequisitos(jogo, meuObjetoFrequencia)
       );
 
