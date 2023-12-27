@@ -639,6 +639,10 @@ document.addEventListener("DOMContentLoaded", function () {
   function escolherNumerosMegaSenaOu(numeros, jogosValidos) {
     // Verifica se jogosValidos é um array válido
     if (Array.isArray(jogosValidos)) {
+      if (numeros.length === 0) {
+        // Se numeros estiver vazia, retorna diretamente jogosValidos
+        return jogosValidos;
+      }
       // Filtra os jogos válidos que contêm pelo menos um dos números fornecidos
       const jogosEscolhidos = jogosValidos.filter((jogo) => {
         // Verifica se pelo menos um dos números está presente no jogo
@@ -659,6 +663,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function escolherNumerosMegaSenaE(numeros, jogosValidos) {
+    // Verifica se a array numeros está vazia
+    if (numeros.length === 0) {
+      // Se numeros estiver vazia, retorna diretamente jogosValidos
+      return jogosValidos;
+    }
     if (!Array.isArray(numeros)) {
       console.error("O argumento 'numeros' não é uma array.");
       return [];
