@@ -372,6 +372,55 @@ document.addEventListener("DOMContentLoaded", function () {
     return [];
   }
 
+  // Função que recebe os valores digitados pelo usuário no input excluirJogos
+  function incluirNumerosMegaSenaOu() {
+    const $incluirNumerosOu = document.getElementById("incluirNumerosOu");
+
+    // Verifica se o elemento existe antes de acessar a propriedade value
+    if ($incluirNumerosOu) {
+      const incluirNumerosOuTexto = $incluirNumerosOu.value;
+
+      // Verifica se a string não está vazia antes de dividir
+      if (incluirNumerosOuTexto.trim() !== "") {
+        // Divida a entrada do usuário em uma matriz de números
+        const incluirNumerosOu = incluirNumerosOuTexto
+          .split(",")
+          .map((numero) => parseInt(numero.trim(), 10))
+          .filter((numero) => !isNaN(numero));
+
+        console.log("Array resultante:", incluirNumerosOu);
+
+        return incluirNumerosOu;
+      }
+    }
+
+    // Se o elemento não existe ou a string está vazia, retorna uma matriz vazia
+    return [];
+  }
+
+  function incluirNumerosMegaSenaE() {
+    const $incluirNumerosE = document.getElementById("incluirNumerosE");
+
+    // Verifica se o elemento existe antes de acessar a propriedade value
+    if ($incluirNumerosE) {
+      const incluirNumerosETexto = $incluirNumerosE.value;
+
+      // Verifica se a string não está vazia antes de dividir
+      if (incluirNumerosETexto.trim() !== "") {
+        // Divida a entrada do usuário em uma matriz de números
+        const incluirNumerosE = incluirNumerosETexto
+          .split(",")
+          .map((numero) => parseInt(numero.trim(), 10))
+          .filter((numero) => !isNaN(numero));
+
+        return incluirNumerosE;
+      }
+    }
+
+    // Se o elemento não existe ou a string está vazia, retorna uma matriz vazia
+    return [];
+  }
+
   //Função correlaciona as letras recebidas nos inputs a resultadoGrupos
   function obterGruposCorrelacionados() {
     const gruposInput = obterGruposPeloInput();
@@ -534,6 +583,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Exibe o resultado proximosJogosMegaSena em uma nova guia.
   function exibirNumerosNaNovaGuia(numeros) {
+    if (numeros === null || numeros.length === 0) {
+      alert("Nenhum jogo possível");
+      return; // Interromper a execução da função se 'numeros' for vazio
+    }
     const lista = Object.keys(numeros).map((coluna, index) => {
       const jogo = numeros[coluna].join("\t");
       return `Jogo ${index + 1}: ${jogo}`;
@@ -580,6 +633,49 @@ document.addEventListener("DOMContentLoaded", function () {
   // }
 
   // função assincrona para execução das outras funções
+
+  //função para escolher alguns números, e excluir os jogos que não tem esses números
+
+  function escolherNumerosMegaSenaOu(numeros, jogosValidos) {
+    // Verifica se jogosValidos é um array válido
+    if (Array.isArray(jogosValidos)) {
+      // Filtra os jogos válidos que contêm pelo menos um dos números fornecidos
+      const jogosEscolhidos = jogosValidos.filter((jogo) => {
+        // Verifica se pelo menos um dos números está presente no jogo
+        const peloMenosUmNumeroPresente = numeros.some((numero) =>
+          jogo.includes(numero)
+        );
+
+        // Retorna true se pelo menos um dos números está presente no jogo, caso contrário, false
+        return peloMenosUmNumeroPresente;
+      });
+
+      console.log(jogosEscolhidos);
+      return jogosEscolhidos;
+    } else {
+      console.error("jogosValidos não é um array válido");
+      return [];
+    }
+  }
+
+  function escolherNumerosMegaSenaE(numeros, jogosValidos) {
+    if (!Array.isArray(numeros)) {
+      console.error("O argumento 'numeros' não é uma array.");
+      return [];
+    }
+    // Filtra os jogos válidos que não contêm nenhum dos números fornecidos
+    const jogosEscolhidos = jogosValidos.filter((jogo) => {
+      // Verifica se todos os números estão presentes no jogo
+      const todosNumerosPresentes = numeros.every((numero) =>
+        jogo.includes(numero)
+      );
+
+      // Retorna true se todos os números estão presentes no jogo, caso contrário, false
+      return todosNumerosPresentes;
+    });
+
+    return jogosEscolhidos;
+  }
 
   async function execute() {
     await frequenciaNumeros();
@@ -784,9 +880,9 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
         // Adiciona mensagens de log
-        console.log("Jogo:", jogo);
-        console.log("Contagem por grupo:", numerosPorGrupo);
-        console.log("Atende requisitos:", atendeRequisitos);
+        // console.log("Jogo:", jogo);
+        // console.log("Contagem por grupo:", numerosPorGrupo);
+        // console.log("Atende requisitos:", atendeRequisitos);
 
         return atendeRequisitos;
       }
@@ -833,9 +929,28 @@ document.addEventListener("DOMContentLoaded", function () {
         atendeRequisitos(jogo, meuObjetoFrequencia)
       );
 
+      console.log("jogos validos", jogosValidos);
+
+      const numerosEscolhidosOu = incluirNumerosMegaSenaOu();
+      console.log("numerosEscolhidosOu", numerosEscolhidosOu);
+
+      const jogosEscolhidosOU = escolherNumerosMegaSenaOu(
+        numerosEscolhidosOu,
+        jogosValidos
+      );
+
+      const novosJogosValidos = jogosEscolhidosOU;
+
+      const numerosEscolhidosE = incluirNumerosMegaSenaE();
+
+      const resultadoFinal = escolherNumerosMegaSenaE(
+        numerosEscolhidosE,
+        novosJogosValidos
+      );
+
       // Imprime o resultado
       //console.log("Proximos Jogos Mega Sena:", proximosJogosMegaSena);
-      exibirNumerosNaNovaGuia(jogosValidos);
+      exibirNumerosNaNovaGuia(resultadoFinal);
 
       // const dadosParaDownload = proximosJogosMegaSena.map((comb) => ({
       //   Jogo: comb.join("\t"), // Separa os números por tabulação
