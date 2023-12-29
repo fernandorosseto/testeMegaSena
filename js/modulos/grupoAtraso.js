@@ -63,6 +63,7 @@ async function funcaoArraysAgrupadasPorTamanho() {
   return arraysAgrupadasPorTamanho;
 }
 
-const grupoAtraso = funcaoArraysAgrupadasPorTamanho();
+const grupoAtraso = await funcaoArraysAgrupadasPorTamanho();
+//console.log(grupoAtraso);
 
 export { grupoAtraso };

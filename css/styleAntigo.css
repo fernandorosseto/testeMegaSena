@@ -7,7 +7,7 @@
   --color-two: #7cba3b;
   --color-background-one: #ffffff;
   --color-background-two: rgb(238, 238, 238);
-  --color-text: #3d3d3d;
+  --color-text: #000000;
   --text-title: "Noto Sans", sans-serif;
   --text-others: "Source Sans Pro", sans-serif;
 }
@@ -99,7 +99,7 @@ main {
 }
 
 .grupo-grid {
-  margin-top: 15px;
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
@@ -125,24 +125,22 @@ main > section > div > h2 {
   margin-bottom: 10px;
 }
 
-.formJogos {
+.setGames {
   margin-top: 20px;
-}
-
-.gridForm {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 10px; /* Espaçamento entre os inputs */
   justify-content: center;
 }
-
-/* .inputEscolherNumeros > input {
-  margin-top: 10px;
+#excluirJogos,
+#inputGrupoAtraso,
+#incluirNumerosOu,
+#incluirNumerosE {
+  grid-column: span 6;
   width: 100%;
-} */
+}
 
-#numerosGrupoFrequencia > input,
-#numerosGrupoFrequenciaAtraso > input {
+.setGames > input {
   width: 50px;
   padding: 4px;
   text-align: center;
@@ -157,23 +155,7 @@ main > section > div > h2 {
   box-shadow: 2px 4px 5px rgba(66, 66, 66, 0.75);
 }
 
-#escolherNumeros > input {
-  width: 100%;
-  margin-top: 10px;
-  padding: 4px;
-  text-align: center;
-  font-size: 12px;
-  text-transform: uppercase;
-  border-width: 1px;
-  border-color: #cccccc;
-  background-color: #ffffff;
-  color: #000000;
-  border-style: solid;
-  border-radius: 9px;
-  box-shadow: 2px 4px 5px rgba(66, 66, 66, 0.75);
-}
-
-.numerosGrupoFrequenciaAtraso > input:focus {
+.setGames > input:focus {
   outline: none;
 }
 

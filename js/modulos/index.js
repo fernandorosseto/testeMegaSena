@@ -1,11 +1,9 @@
 import { grupoFrequencia } from "./grupoFrequencia.js";
 import { grupoAtraso } from "./grupoAtraso.js";
-//import { iniciarPreparacaoDados } from "./preparacaoDados.js";
-
-//console.log(iniciarPreparacaoDados());
 
 async function exibirGruposAtraso() {
-  const grupoAtrasoIndex = await grupoAtraso;
+  const grupoAtrasoIndex = grupoAtraso;
+  //console.log("Grupo Atraso", grupoAtrasoIndex);
 
   const $divGrupoAtraso = document.getElementById("grupoAtraso");
   $divGrupoAtraso.innerHTML = "";
@@ -44,7 +42,7 @@ async function exibirGruposAtraso() {
   $divGrupoAtraso.appendChild(gridContainer);
 }
 
-//------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 //Nomeando os grupos no front-end com base nos índices, A para o resultadoGrupos[0], até o J para o resultadoGrupos[9]
 function obterLetraDoIndice(indice) {
   return String.fromCharCode("A".charCodeAt(0) + indice);
@@ -63,7 +61,7 @@ async function exibirGrupos() {
   const grupoFrequenciaNumerico = grupoFrequenciaIndex.map((grupo) =>
     grupo.map((elemento) => Number(elemento))
   );
-  console.log(grupoFrequenciaNumerico);
+  //console.log("Grupo Frequência", grupoFrequenciaNumerico);
   const $divGrupoFrequencia = document.getElementById("grupoFrequencia");
   $divGrupoFrequencia.innerHTML = "";
 
@@ -185,10 +183,86 @@ function obterNumerosExcluir() {
 
 const $btnEnviar = document.getElementById("btnEnviar");
 
+// Função que recebe os valores digitados pelo usuário no input excluirJogos
+function incluirNumerosMegaSenaOu() {
+  const $incluirNumerosOu = document.getElementById("incluirNumerosOu");
+
+  // Verifica se o elemento existe antes de acessar a propriedade value
+  if ($incluirNumerosOu) {
+    const incluirNumerosOuTexto = $incluirNumerosOu.value;
+
+    // Verifica se a string não está vazia antes de dividir
+    if (incluirNumerosOuTexto.trim() !== "") {
+      // Divida a entrada do usuário em uma matriz de números
+      const incluirNumerosOu = incluirNumerosOuTexto
+        .split(",")
+        .map((numero) => parseInt(numero.trim(), 10))
+        .filter((numero) => !isNaN(numero));
+
+      console.log("Array resultante:", incluirNumerosOu);
+
+      return incluirNumerosOu;
+    }
+  }
+
+  // Se o elemento não existe ou a string está vazia, retorna uma matriz vazia
+  return [];
+}
+
+function incluirNumerosMegaSenaE() {
+  const $incluirNumerosE = document.getElementById("incluirNumerosE");
+
+  // Verifica se o elemento existe antes de acessar a propriedade value
+  if ($incluirNumerosE) {
+    const incluirNumerosETexto = $incluirNumerosE.value;
+
+    // Verifica se a string não está vazia antes de dividir
+    if (incluirNumerosETexto.trim() !== "") {
+      // Divida a entrada do usuário em uma matriz de números
+      const incluirNumerosE = incluirNumerosETexto
+        .split(",")
+        .map((numero) => parseInt(numero.trim(), 10))
+        .filter((numero) => !isNaN(numero));
+
+      return incluirNumerosE;
+    }
+  }
+
+  // Se o elemento não existe ou a string está vazia, retorna uma matriz vazia
+  return [];
+}
+// Exibir o resultado Final no HTML em uma nova página
+function exibirNumerosNaNovaGuia(numeros) {
+  if (numeros === null || numeros.length === 0) {
+    alert("Nenhum jogo possível");
+    return; // Interromper a execução da função se 'numeros' for vazio
+  }
+  const lista = Object.keys(numeros).map((coluna, index) => {
+    const jogo = numeros[coluna].join("\t");
+    return `Jogo ${index + 1}: ${jogo}`;
+  });
+
+  // Criar uma nova guia
+  const novaGuia = window.open("");
+
+  // Adicionar conteúdo à nova guia
+  novaGuia.document.write(
+    "<html><head><title>Resultados da Mega Sena</title></head><body><ul>"
+  );
+  lista.forEach((item) => {
+    novaGuia.document.write(`<li>${item}</li>`);
+  });
+  novaGuia.document.write("</ul></body></html>");
+  novaGuia.document.close();
+}
+
 export {
+  $btnEnviar,
   exibirGruposAtraso,
   exibirGrupos,
   obterGruposPeloInput,
   obterNumerosExcluir,
-  $btnEnviar,
+  incluirNumerosMegaSenaE,
+  incluirNumerosMegaSenaOu,
+  exibirNumerosNaNovaGuia,
 };

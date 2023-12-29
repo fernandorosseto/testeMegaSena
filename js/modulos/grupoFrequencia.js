@@ -3,7 +3,7 @@ import { dadosPagina2 } from "./dados.js";
 //lógica para criar o grupo frequência
 async function frequenciaNumeros() {
   const dadosPagina2variavel = await dadosPagina2();
-  console.log(dadosPagina2variavel);
+  //console.log(dadosPagina2variavel);
 
   function distribuirDezenas(dados) {
     // Ordenar as dezenas por frequência de forma decrescente
@@ -93,6 +93,12 @@ async function frequenciaNumeros() {
   return resultadoGrupos;
 }
 
-const grupoFrequencia = frequenciaNumeros();
+const grupoFrequenciaNumeros = await frequenciaNumeros();
+
+const grupoFrequencia = grupoFrequenciaNumeros.map((grupo) => {
+  return grupo.map((numero) => parseInt(numero, 10));
+});
+
+//console.log(grupoFrequencia);
 
 export { grupoFrequencia };
