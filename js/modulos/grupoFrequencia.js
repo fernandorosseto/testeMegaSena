@@ -8,6 +8,7 @@ async function frequenciaNumeros() {
   function distribuirDezenas(dados) {
     // Ordenar as dezenas por frequência de forma decrescente
     const sortedData = dados.sort((a, b) => b[1] - a[1]);
+    console.log("frequência dos números ordenados", sortedData);
 
     // Inicializar os grupos
     const gruposFrequencia = Array.from({ length: 10 }, () => []);
@@ -64,15 +65,27 @@ async function frequenciaNumeros() {
         } têm a mesma quantidade dos números ${numerosIguaisDoProximoGrupo.join(
           ", "
         )} do grupo ${i + 2}`;
-        //console.log(mensagem);
+        console.log(mensagem);
+
+        if (numerosIguais.length <= numerosIguaisDoProximoGrupo.length) {
+          // Mover os números iguais para o próximo grupo
+          numerosIguais.forEach((num) => {
+            const indexNoGrupoAtual = grupoAtual.indexOf(num);
+            grupoAtual.splice(indexNoGrupoAtual, 1);
+            proximoGrupo.push(num);
+          });
+        } else {
+          // Adicionar os números iguais do próximo ao grupo atual
+          numerosIguaisDoProximoGrupo.forEach((num) => {
+            const indexNoProximoGrupo = proximoGrupo.indexOf(num);
+            if (indexNoProximoGrupo !== -1) {
+              proximoGrupo.splice(indexNoProximoGrupo, 1);
+              grupoAtual.push(num);
+            }
+          });
+        }
       }
 
-      // Mover os números iguais para o próximo grupo
-      numerosIguais.forEach((num) => {
-        const indexNoGrupoAtual = grupoAtual.indexOf(num);
-        grupoAtual.splice(indexNoGrupoAtual, 1);
-        proximoGrupo.push(num);
-      });
       proximoGrupo.sort((a, b) => {
         const frequenciaA = sortedData.find((item) => item[0] === a)[1];
         const frequenciaB = sortedData.find((item) => item[0] === b)[1];
