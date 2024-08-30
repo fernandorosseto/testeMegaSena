@@ -13,6 +13,7 @@ import {
   escolherNumerosMegaSenaE,
   escolherNumerosMegaSenaOu,
 } from "./modulos/filtros.js";
+import { gruposColunas } from "./modulos/grupoColuna.js";
 
 //Exibir os grupos na tela
 exibirGrupos();

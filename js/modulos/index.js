@@ -1,5 +1,6 @@
 import { grupoFrequencia } from "./grupoFrequencia.js";
 import { grupoAtraso } from "./grupoAtraso.js";
+import { gruposColunas } from "./grupoColuna.js";
 
 async function exibirGruposAtraso() {
   const grupoAtrasoIndex = grupoAtraso;
@@ -49,15 +50,17 @@ function obterLetraDoIndice(indice) {
 }
 
 // //função para obter a frequência dos números será utilizarda na função exibir grupos
-// // Código não utilizado
 // function obterQuantidadeFrequencia(numero) {
-//   const item = dadosPagina2.find((item) => item[0] === numero);
+//   const item = grupoFrequencia.find((item) => item[0] === numero);
 //   return item ? item[1] : 0;
 // }
 
+// const testeFrequencia = obterQuantidadeFrequencia();
+// console.log(grupoFrequencia, testeFrequencia);
+
 // Exibindo os grupos no front-end
 async function exibirGrupos() {
-  const grupoFrequenciaIndex = await grupoFrequencia;
+  const grupoFrequenciaIndex = grupoFrequencia;
   const grupoFrequenciaNumerico = grupoFrequenciaIndex.map((grupo) =>
     grupo.map((elemento) => Number(elemento))
   );
@@ -83,16 +86,16 @@ async function exibirGrupos() {
       cellNumero.textContent = numero;
       cellNumero.style.overflow = "hidden";
 
-      //   // Adiciona evento de duplo clique para mostrar a quantidade da frequência
-      //   cellNumero.addEventListener("dblclick", () => {
-      //     const quantidadeFrequencia = obterQuantidadeFrequencia(numero);
-      //     cellNumero.textContent = quantidadeFrequencia;
+      // Adiciona evento de duplo clique para mostrar a quantidade da frequência
+      cellNumero.addEventListener("dblclick", () => {
+        const quantidadeFrequencia = obterQuantidadeFrequencia(numero);
+        cellNumero.textContent = quantidadeFrequencia;
 
-      //     // Atrasa a troca de volta ao número original em 1000 milissegundos (1 segundo)
-      //     setTimeout(() => {
-      //       cellNumero.textContent = numero;
-      //     }, 1000);
-      //   });
+        // Atrasa a troca de volta ao número original em 1000 milissegundos (1 segundo)
+        setTimeout(() => {
+          cellNumero.textContent = numero;
+        }, 1000);
+      });
     });
   });
 
@@ -255,6 +258,53 @@ function exibirNumerosNaNovaGuia(numeros) {
   novaGuia.document.write("</ul></body></html>");
   novaGuia.document.close();
 }
+
+//---------------------------------------------------------------------------
+//Exibição dos grupos Coluna
+
+async function exibirGruposColunas() {
+  const grupoColunaIndex = gruposColunas;
+  //console.log("Grupo Coluna", grupoColunaIndex);
+
+  const $divGrupoColuna = document.getElementById("gruposColunas");
+  $divGrupoColuna.innerHTML = "";
+
+  // Cria um contêiner para a grade
+  const gridContainerColuna = document.createElement("div");
+  gridContainerColuna.classList.add("grupo-grid-Coluna");
+
+  // Adiciona os grupos ao contêiner da grade
+  for (const tamanho in grupoColunaIndex) {
+    if (grupoColunaIndex.hasOwnProperty(tamanho)) {
+      const grupo = grupoColunaIndex[tamanho];
+
+      // Cria uma div para cada grupo
+      const grupoDiv = document.createElement("div");
+      grupoDiv.classList.add("grupo-item");
+
+      // Adiciona o número do grupo
+      const grupoNumero = document.createElement("div");
+      grupoNumero.textContent = `Grupo ${tamanho}`;
+      grupoDiv.appendChild(grupoNumero);
+
+      // Adiciona cada número do grupo em células individuais
+      grupo.forEach((numero) => {
+        const numeroDiv = document.createElement("div");
+        numeroDiv.textContent = numero;
+        grupoDiv.appendChild(numeroDiv);
+      });
+
+      // Adiciona a div do grupo ao contêiner da grade
+      gridContainerColuna.appendChild(grupoDiv);
+    }
+  }
+
+  // Adiciona o contêiner da grade ao elemento $divGrupoColuna
+  $divGrupoColuna.appendChild(gridContainerColuna);
+}
+
+// Chame a função para exibir os grupos após carregar os dados
+exibirGruposColunas();
 
 export {
   $btnEnviar,
