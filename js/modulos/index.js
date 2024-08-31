@@ -24,7 +24,7 @@ async function exibirGruposAtraso() {
 
       // Adiciona o número do grupo
       const grupoNumero = document.createElement("div");
-      grupoNumero.textContent = `Grupo ${tamanho},`;
+      grupoNumero.textContent = `Grupo ${tamanho}`;
       grupoDiv.appendChild(grupoNumero);
 
       // Adiciona cada número do grupo em células individuais
@@ -260,47 +260,37 @@ function exibirNumerosNaNovaGuia(numeros) {
 }
 
 //---------------------------------------------------------------------------
-//Exibição dos grupos Coluna
+// Grupo Coluna
 
 async function exibirGruposColunas() {
   const grupoColunaIndex = gruposColunas;
-  //console.log("Grupo Coluna", grupoColunaIndex);
 
   const $divGrupoColuna = document.getElementById("gruposColunas");
   $divGrupoColuna.innerHTML = "";
 
-  // Cria um contêiner para a grade
-  const gridContainerColuna = document.createElement("div");
-  gridContainerColuna.classList.add("grupo-grid-Coluna");
+  // Cria uma tabela
+  const tabela = document.createElement("table");
 
-  // Adiciona os grupos ao contêiner da grade
-  for (const tamanho in grupoColunaIndex) {
-    if (grupoColunaIndex.hasOwnProperty(tamanho)) {
-      const grupo = grupoColunaIndex[tamanho];
+  // Adiciona os grupos à tabela
+  Object.keys(grupoColunaIndex).forEach((tamanho) => {
+    const grupo = grupoColunaIndex[tamanho];
+    const row = tabela.insertRow(-1);
 
-      // Cria uma div para cada grupo
-      const grupoDiv = document.createElement("div");
-      grupoDiv.classList.add("grupo-item");
+    // Adiciona o número do grupo em uma célula
+    const cellGrupo = row.insertCell(0);
+    cellGrupo.style.overflow = "hidden";
+    cellGrupo.textContent = `Grupo ${tamanho}`;
 
-      // Adiciona o número do grupo
-      const grupoNumero = document.createElement("div");
-      grupoNumero.textContent = `Grupo ${tamanho}`;
-      grupoDiv.appendChild(grupoNumero);
+    // Adiciona cada número do grupo em células individuais
+    grupo.forEach((numero) => {
+      const cellNumero = row.insertCell(-1);
+      cellNumero.textContent = numero;
+      cellNumero.style.overflow = "hidden";
+    });
+  });
 
-      // Adiciona cada número do grupo em células individuais
-      grupo.forEach((numero) => {
-        const numeroDiv = document.createElement("div");
-        numeroDiv.textContent = numero;
-        grupoDiv.appendChild(numeroDiv);
-      });
-
-      // Adiciona a div do grupo ao contêiner da grade
-      gridContainerColuna.appendChild(grupoDiv);
-    }
-  }
-
-  // Adiciona o contêiner da grade ao elemento $divGrupoColuna
-  $divGrupoColuna.appendChild(gridContainerColuna);
+  // Adiciona a tabela ao elemento $divGrupoColuna
+  $divGrupoColuna.appendChild(tabela);
 }
 
 // Chame a função para exibir os grupos após carregar os dados

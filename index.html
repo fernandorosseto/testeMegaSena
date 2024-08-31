@@ -29,17 +29,19 @@
           <div id="grupoAtraso"></div>
         </div>
       </section>
-      <!-- <section class="container"> -->
-      <!-- <div class="conteudo"> -->
-      <!-- <h2>Grupo Coluna</h2> -->
-      <!-- <div id="gruposColunas"></div> -->
-      <!-- </div> -->
-      <!-- </section> -->
       <section class="container">
+        <div class="conteudo">
+          <h2>Grupo Coluna</h2>
+          <div id="gruposColunas">teste grupo coluna</div>
+        </div>
+      </section>
+      <section class="containerFormJogos">
         <div class="conteudo">
           <h2>Formação de Jogos</h2>
           <!-- conteúdo -->
+
           <form class="formJogos gridForm" id="numerosGrupoFrequencia">
+            <div>grupoFrequencia</div>
             <input
               type="text"
               name="primeroGrupo"
@@ -90,6 +92,7 @@
               required />
           </form>
           <form id="numerosGrupoFrequenciaAtraso" class="formJogos gridForm">
+            <div>GrupoAtraso</div>
             <input
               type="text"
               id="inputGrupoAtrasoUm"
@@ -127,6 +130,47 @@
               maxlength="1"
               oninput="this.value = this.value.replace(/[^0-9,]/g, '');focusNext(this, 'incluirNumerosOu')" />
           </form>
+
+          <form id="numerosGrupoColuna" class="formJogos gridForm">
+            <div>gruposColunas</div>
+            <input
+              type="text"
+              id="inputGrupoColunaUm"
+              placeholder="1"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^0-9,]/g, '');focusNext(this, 'inputGrupoColunaDois')" />
+            <input
+              type="text"
+              id="inputGrupoColunaDois"
+              placeholder="2"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^0-9,]/g, '');focusNext(this, 'inputGrupoColunaTres')" />
+            <input
+              type="text"
+              id="inputGrupoColunaTres"
+              placeholder="3"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^0-9,]/g, '');focusNext(this, 'inputGrupoColunaQuatro')" />
+            <input
+              type="text"
+              id="inputGrupoColunaQuatro"
+              placeholder="4"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^0-9,]/g, '');focusNext(this, 'inputGrupoColunaCinco')" />
+            <input
+              type="text"
+              id="inputGrupoColunaCinco"
+              placeholder="5"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^0-9,]/g, '');focusNext(this, 'inputGrupoColunaSeis')" />
+            <input
+              type="text"
+              id="inputGrupoColunaSeis"
+              placeholder="6"
+              maxlength="1"
+              oninput="this.value = this.value.replace(/[^0-9,]/g, '');focusNext(this, 'incluirNumerosOu')" />
+          </form>
+
           <form id="escolherNumeros" class="formJogos inputEscolherNumeros">
             <input
               type="text"
@@ -147,6 +191,7 @@
               value=""
               oninput="this.value = this.value.replace(/[^0-9,]/g, '')" />
           </form>
+
           <script>
             function focusNext(currentInput, nextInputId) {
               const maxLength = 1;
@@ -166,9 +211,10 @@
           <div id="resultado"></div>
         </div>
       </section>
+
+      <section>
+        <div id="ultimos10jogos"></div>
+      </section>
     </main>
-    <section>
-      <div id="ultimos10jogos"></div>
-    </section>
   </body>
 </html>
