@@ -1,6 +1,7 @@
 import { gruposInput, numerosExcluir } from "../main.js";
 import { grupoFrequencia } from "./grupoFrequencia.js";
 import { grupoAtraso } from "./grupoAtraso.js";
+import { gruposColunas } from "./grupoColuna.js";
 
 let numerosFiltradosPorAtraso;
 let correlaçãoFrequenciaGlobal;
