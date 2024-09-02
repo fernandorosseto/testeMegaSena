@@ -41,6 +41,5 @@ async function agruparPorPosicao() {
 }
 
 const gruposColunas = await agruparPorPosicao();
-console.log(gruposColunas);
 
 export { gruposColunas };

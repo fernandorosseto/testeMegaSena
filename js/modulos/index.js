@@ -140,6 +140,25 @@ function obterGruposPeloInput() {
     "inputGrupoAtrasoSeis"
   ).value;
 
+  // Coleta dos grupos de colunas
+  const $inputGrupoColunaUm =
+    document.getElementById("inputGrupoColunaUm").value;
+  const $inputGrupoColunaDois = document.getElementById(
+    "inputGrupoColunaDois"
+  ).value;
+  const $inputGrupoColunaTres = document.getElementById(
+    "inputGrupoColunaTres"
+  ).value;
+  const $inputGrupoColunaQuatro = document.getElementById(
+    "inputGrupoColunaQuatro"
+  ).value;
+  const $inputGrupoColunaCinco = document.getElementById(
+    "inputGrupoColunaCinco"
+  ).value;
+  const $inputGrupoColunaSeis = document.getElementById(
+    "inputGrupoColunaSeis"
+  ).value;
+
   const numerosFrequencia = [
     $primeiroGrupo,
     $segundoGrupo,
@@ -158,7 +177,16 @@ function obterGruposPeloInput() {
     $inputGrupoAtrasoSeis,
   ];
 
-  return { numerosFrequencia, numerosAtraso };
+  const numerosColuna = [
+    $inputGrupoColunaUm,
+    $inputGrupoColunaDois,
+    $inputGrupoColunaTres,
+    $inputGrupoColunaQuatro,
+    $inputGrupoColunaCinco,
+    $inputGrupoColunaSeis,
+  ];
+
+  return { numerosFrequencia, numerosAtraso, numerosColuna };
 }
 
 function obterNumerosExcluir() {
@@ -202,7 +230,7 @@ function incluirNumerosMegaSenaOu() {
         .map((numero) => parseInt(numero.trim(), 10))
         .filter((numero) => !isNaN(numero));
 
-      console.log("Array resultante:", incluirNumerosOu);
+      //console.log("Array resultante:", incluirNumerosOu);
 
       return incluirNumerosOu;
     }

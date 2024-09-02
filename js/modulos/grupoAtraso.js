@@ -14,7 +14,7 @@ async function funcaoArraysAgrupadasPorTamanho() {
         dezenas.push(dezena);
       }
     }
-    console.log("dezenas", dezenas);
+    //console.log("dezenas", dezenas);
     return dezenas;
   });
 

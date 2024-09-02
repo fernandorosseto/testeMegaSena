@@ -8,7 +8,7 @@ async function frequenciaNumeros() {
   function distribuirDezenas(dados) {
     // Ordenar as dezenas por frequência de forma decrescente
     const sortedData = dados.sort((a, b) => b[1] - a[1]);
-    console.log("frequência dos números ordenados", sortedData);
+    //console.log("frequência dos números ordenados", sortedData);
 
     // Inicializar os grupos
     const gruposFrequencia = Array.from({ length: 10 }, () => []);
@@ -65,7 +65,7 @@ async function frequenciaNumeros() {
         } têm a mesma quantidade dos números ${numerosIguaisDoProximoGrupo.join(
           ", "
         )} do grupo ${i + 2}`;
-        console.log(mensagem);
+        //console.log(mensagem);
 
         if (numerosIguais.length <= numerosIguaisDoProximoGrupo.length) {
           // Mover os números iguais para o próximo grupo

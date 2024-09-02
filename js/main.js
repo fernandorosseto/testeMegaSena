@@ -29,6 +29,7 @@ let resultadoFinal;
 $btnEnviar.addEventListener("click", function () {
   //console.log("Clique");
   gruposInput = obterGruposPeloInput();
+  console.log("numeros do input", gruposInput);
 
   numerosExcluir = obterNumerosExcluir();
 

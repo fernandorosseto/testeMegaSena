@@ -14,61 +14,74 @@ let correlaçãoFrequenciaGlobal;
 // }
 
 function preparacaoDados() {
-  // await esperarCliqueDoBotao();
-
+  // Função para obter os grupos correlacionados
   function obterGruposCorrelacionados() {
-    const { numerosFrequencia, numerosAtraso } = gruposInput;
-    console.log("numerosFrequencia e atraso", numerosFrequencia, numerosAtraso);
+    const { numerosFrequencia, numerosAtraso, numerosColuna } = gruposInput;
+    console.log(
+      "numerosFrequencia, atraso e colunas",
+      numerosFrequencia,
+      numerosAtraso,
+      numerosColuna
+    );
+
     const correlacaoFrequencia = {};
     const correlacaoAtraso = {};
+    const correlacaoColuna = {};
 
+    // Processa os grupos de frequência
     numerosFrequencia.forEach((letra) => {
       const indiceGrupoFrequencia = letra.charCodeAt(0) - "A".charCodeAt(0);
 
       let nomeGrupoFrequencia = letra;
 
-      // Verifique se a chave já existe no objeto
       while (correlacaoFrequencia[nomeGrupoFrequencia]) {
-        // Se existir, adicione um sufixo incremental ao nome para permitir duplicidades
         const numeroSufixo = parseInt(nomeGrupoFrequencia.slice(1)) || 1;
         nomeGrupoFrequencia = letra + (numeroSufixo + 1);
       }
 
-      // Crie uma cópia do grupo correspondente e atribua ao nome atualizado
       correlacaoFrequencia[nomeGrupoFrequencia] =
         grupoFrequencia[indiceGrupoFrequencia].slice();
     });
 
+    // Processa os grupos de atraso
     numerosAtraso.forEach((indice) => {
       const indiceGrupoAtraso = indice;
 
       let nomeGrupoAtraso = `Grupo Atraso ${indice}`;
 
-      // Verifique se a chave já existe no objeto
       while (correlacaoAtraso[nomeGrupoAtraso]) {
-        // Se existir, adicione um sufixo incremental ao nome para permitir duplicidades
         const numeroSufixo = parseInt(nomeGrupoAtraso.slice(13)) || 1;
         nomeGrupoAtraso = `Grupo Atraso ${numeroSufixo + 1}`;
       }
 
-      // Crie uma cópia do grupo correspondente e atribua ao nome atualizado
       correlacaoAtraso[nomeGrupoAtraso] = grupoAtraso[indiceGrupoAtraso];
     });
 
-    // Retorne os resultados em um objeto
+    // Processa os grupos de colunas
+    numerosColuna.forEach((indice, i) => {
+      const nomeGrupoColuna = `Grupo Coluna ${i + 1}`;
+      correlacaoColuna[nomeGrupoColuna] = gruposColunas[indice];
+    });
+
+    // Retorna os resultados em um objeto
     return {
       correlacaoFrequencia,
       correlacaoAtraso,
+      correlacaoColuna,
     };
   }
 
-  const { correlacaoFrequencia, correlacaoAtraso } =
+  // Obtém os grupos correlacionados
+  const { correlacaoFrequencia, correlacaoAtraso, correlacaoColuna } =
     obterGruposCorrelacionados();
   console.log("grupoFrequencia", correlacaoFrequencia);
   console.log("grupoAtraso", correlacaoAtraso);
+  console.log("grupoColuna", correlacaoColuna);
 
+  // Armazena a correlação global
   correlaçãoFrequenciaGlobal = correlacaoFrequencia;
 
+  // Filtra os números de acordo com os grupos de atraso e frequência
   function filtrarNumerosPorGruposAtraso(atraso, gruposFrequencia) {
     const numerosFiltrados = {};
 
@@ -91,12 +104,14 @@ function preparacaoDados() {
     return numerosFiltrados;
   }
 
+  // Realiza a filtragem dos números com base nos grupos de atraso
   numerosFiltradosPorAtraso = filtrarNumerosPorGruposAtraso(
     correlacaoAtraso,
     correlacaoFrequencia
   );
   //console.log("numerosFiltrados", numerosFiltradosPorAtraso);
 
+  // Função para excluir números específicos
   function excluirNumeros(numerosExcluir, numerosFiltradosPorAtraso) {
     const copiaNumerosFitradosPorAtraso = { ...numerosFiltradosPorAtraso }; // Cria uma cópia
 
@@ -113,6 +128,7 @@ function preparacaoDados() {
     return copiaNumerosFitradosPorAtraso;
   }
 
+  // Exclui os números indesejados e prepara os números para a formação de jogos
   const numerosParaFormacaoDeJogos = excluirNumeros(
     numerosExcluir,
     numerosFiltradosPorAtraso

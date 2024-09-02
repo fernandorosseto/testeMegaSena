@@ -16,7 +16,7 @@ function escolherNumerosMegaSenaOu(numeros, jogosValidos) {
       return peloMenosUmNumeroPresente;
     });
 
-    console.log(jogosEscolhidos);
+    //console.log(jogosEscolhidos);
     return jogosEscolhidos;
   } else {
     console.error("jogosValidos não é um array válido");

@@ -224,7 +224,9 @@ main > section > div > h2 {
   line-height: 26px;
 }
 
-#grupoFrequencia {
+#grupoFrequencia,
+#grupoAtraso,
+#gruposColunas {
   font-family: Arial, sans-serif;
   font-size: 16px;
   line-height: 1.6;

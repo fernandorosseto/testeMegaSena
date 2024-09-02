@@ -74,21 +74,27 @@ function executarFormacaoDeJogos() {
   //console.log("resultado todos os Jogos", resultadoTodosJogos);
 
   function atendeRequisitos(jogo, meuObjetoFrequencia) {
-    // Inicializa um objeto para contar quantos números de cada grupo estão no jogo
     const numerosPorGrupo = {};
+
+    // Adicionando tratamento para correlacaoAtraso e correlacaoColuna
+    const meuObjetoCompleto = {
+      ...meuObjetoFrequencia,
+      ...dadosPreparados.correlacaoAtraso,
+      ...dadosPreparados.correlacaoColuna,
+    };
 
     // Conta quantas vezes cada grupo aparece no objeto de frequência
     const contagemChavesIguais = {};
-    Object.keys(meuObjetoFrequencia).forEach((grupo) => {
-      const chave = meuObjetoFrequencia[grupo].toString();
+    Object.keys(meuObjetoCompleto).forEach((grupo) => {
+      const chave = meuObjetoCompleto[grupo].toString();
       contagemChavesIguais[chave] = (contagemChavesIguais[chave] || 0) + 1;
       numerosPorGrupo[grupo] = 0; // Inicializa a contagem para cada grupo
     });
 
     // Conta quantos números do grupo cada jogo contém
     jogo.forEach((numero) => {
-      Object.keys(meuObjetoFrequencia).forEach((grupo) => {
-        if (meuObjetoFrequencia[grupo].includes(numero)) {
+      Object.keys(meuObjetoCompleto).forEach((grupo) => {
+        if (meuObjetoCompleto[grupo].includes(numero)) {
           // Incrementa a contagem para o grupo atual
           numerosPorGrupo[grupo]++;
         }
@@ -96,8 +102,8 @@ function executarFormacaoDeJogos() {
     });
 
     // Verifica se cada grupo tem a quantidade correta de números no jogo
-    const atendeRequisitos = Object.keys(meuObjetoFrequencia).every((grupo) => {
-      const chave = meuObjetoFrequencia[grupo].toString();
+    const atendeRequisitos = Object.keys(meuObjetoCompleto).every((grupo) => {
+      const chave = meuObjetoCompleto[grupo].toString();
       return numerosPorGrupo[grupo] === contagemChavesIguais[chave];
     });
 
@@ -112,7 +118,7 @@ function executarFormacaoDeJogos() {
   const resultadoFinalFormacaoJogos = resultadoTodosJogos.filter((jogo) =>
     atendeRequisitos(jogo, correlaçãoFrequenciaGlobal)
   );
-  console.log("resultadoFinalFormacaoJogos", resultadoFinalFormacaoJogos);
+  //console.log("resultadoFinalFormacaoJogos", resultadoFinalFormacaoJogos);
 
   return resultadoFinalFormacaoJogos;
 }
