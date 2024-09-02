@@ -125,10 +125,11 @@ main {
   padding: 5px;
   margin-bottom: 5px;
   text-align: center;
-  display: flex; /* Torna o grupo-item um contêiner flexível */
-  flex-direction: column; /* Empilha os elementos verticalmente */
-  justify-content: center; /* Centraliza os elementos verticalmente */
-  align-items: center; /* Centraliza os elementos horizontalmente */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  object-fit: cover;
 }
 
 main > section > div > h2 {
