@@ -17,12 +17,6 @@ function preparacaoDados() {
   // Função para obter os grupos correlacionados
   function obterGruposCorrelacionados() {
     const { numerosFrequencia, numerosAtraso, numerosColuna } = gruposInput;
-    console.log(
-      "numerosFrequencia, atraso e colunas",
-      numerosFrequencia,
-      numerosAtraso,
-      numerosColuna
-    );
 
     const correlacaoFrequencia = {};
     const correlacaoAtraso = {};
@@ -63,6 +57,13 @@ function preparacaoDados() {
       correlacaoColuna[nomeGrupoColuna] = gruposColunas[indice];
     });
 
+    // console.log(
+    //   "numerosFrequencia, atraso e colunas",
+    //   numerosFrequencia,
+    //   numerosAtraso,
+    //   numerosColuna
+    // );
+
     // Retorna os resultados em um objeto
     return {
       correlacaoFrequencia,
@@ -81,22 +82,28 @@ function preparacaoDados() {
   // Armazena a correlação global
   correlaçãoFrequenciaGlobal = correlacaoFrequencia;
 
-  // Filtra os números de acordo com os grupos de atraso e frequência
-  function filtrarNumerosPorGruposAtraso(atraso, gruposFrequencia) {
+  // Função para filtrar números de acordo com todos os grupos (frequência, atraso e colunas)
+  function filtrarNumerosPorGrupos(atraso, frequencia, coluna) {
     const numerosFiltrados = {};
 
     for (const grupoAtraso in atraso) {
-      const numerosGrupoAtraso = atraso[grupoAtraso].flat();
+      // Usamos flat(2) para garantir que todos os níveis de arrays sejam "achados"
+      const numerosGrupoAtraso = atraso[grupoAtraso].flat(2);
       const numerosFiltradosGrupo = [];
 
-      for (const grupoFrequenciaKey of Object.keys(gruposFrequencia)) {
-        const numerosGrupoFrequencia = gruposFrequencia[grupoFrequenciaKey];
-        const numerosComuns = numerosGrupoAtraso.filter((numero) =>
-          numerosGrupoFrequencia.includes(numero)
+      numerosGrupoAtraso.forEach((numero) => {
+        // Verifica se o número está presente em qualquer grupo de frequência e colunas
+        const existeEmFrequencia = Object.values(frequencia).some(
+          (grupoFrequencia) => grupoFrequencia.includes(numero)
+        );
+        const existeEmColuna = Object.values(coluna).some((grupoColuna) =>
+          grupoColuna.includes(numero)
         );
 
-        numerosFiltradosGrupo.push(numerosComuns);
-      }
+        if (existeEmFrequencia && existeEmColuna) {
+          numerosFiltradosGrupo.push(numero);
+        }
+      });
 
       numerosFiltrados[grupoAtraso] = numerosFiltradosGrupo;
     }
@@ -104,11 +111,13 @@ function preparacaoDados() {
     return numerosFiltrados;
   }
 
-  // Realiza a filtragem dos números com base nos grupos de atraso
-  numerosFiltradosPorAtraso = filtrarNumerosPorGruposAtraso(
+  // Realiza a filtragem dos números com base nos grupos de atraso, frequência e colunas
+  numerosFiltradosPorAtraso = filtrarNumerosPorGrupos(
     correlacaoAtraso,
-    correlacaoFrequencia
+    correlacaoFrequencia,
+    correlacaoColuna
   );
+
   //console.log("numerosFiltrados", numerosFiltradosPorAtraso);
 
   // Função para excluir números específicos
@@ -118,11 +127,16 @@ function preparacaoDados() {
     for (const letra in copiaNumerosFitradosPorAtraso) {
       copiaNumerosFitradosPorAtraso[letra] = copiaNumerosFitradosPorAtraso[
         letra
-      ].map((numeros) =>
-        numeros.filter(
-          (numero) => !numerosExcluir.includes(parseInt(numero, 10))
-        )
-      );
+      ].map((numeros) => {
+        if (Array.isArray(numeros)) {
+          return numeros.filter(
+            (numero) => !numerosExcluir.includes(parseInt(numero, 10))
+          );
+        } else {
+          // Se `numeros` não for um array, mas sim um número ou outro valor, apenas retorne-o sem modificações
+          return numeros;
+        }
+      });
     }
 
     return copiaNumerosFitradosPorAtraso;

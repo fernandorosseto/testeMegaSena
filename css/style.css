@@ -228,12 +228,12 @@ main > section > div > h2 {
 #grupoAtraso,
 #gruposColunas {
   font-family: Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  margin-top: 20px;
+  font-size: 15px;
+  line-height: 1;
+  margin-top: 17px;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 2px;
 }
 
 #grupoFrequencia .grupo {
@@ -246,7 +246,7 @@ main > section > div > h2 {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin-top: 7px;
   overflow: hidden;
 }
 
