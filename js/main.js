@@ -29,12 +29,13 @@ let resultadoFinal;
 $btnEnviar.addEventListener("click", function () {
   //console.log("Clique");
   gruposInput = obterGruposPeloInput();
-  console.log("numeros do input", gruposInput);
+  // console.log("numeros do input", gruposInput);
 
   numerosExcluir = obterNumerosExcluir();
+  console.log("numerosExcluir", numerosExcluir);
 
   jogosFiltrados = executarFormacaoDeJogos();
-  console.log("jogosFiltrados", jogosFiltrados);
+  //console.log("jogosFiltrados", jogosFiltrados);
 
   const numerosEscolhidosOu = incluirNumerosMegaSenaOu();
 

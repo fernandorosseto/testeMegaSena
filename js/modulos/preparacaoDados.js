@@ -4,7 +4,8 @@ import { grupoAtraso } from "./grupoAtraso.js";
 import { gruposColunas } from "./grupoColuna.js";
 
 let numerosFiltradosPorAtraso;
-let correlaçãoFrequenciaGlobal;
+let correlacaoFrequenciaGlobal;
+let correlacaoColunaGlobal;
 
 // function esperarCliqueDoBotao() {
 //   return new Promise((resolve) => {
@@ -75,12 +76,13 @@ function preparacaoDados() {
   // Obtém os grupos correlacionados
   const { correlacaoFrequencia, correlacaoAtraso, correlacaoColuna } =
     obterGruposCorrelacionados();
-  console.log("grupoFrequencia", correlacaoFrequencia);
-  console.log("grupoAtraso", correlacaoAtraso);
-  console.log("grupoColuna", correlacaoColuna);
+  // console.log("grupoFrequencia", correlacaoFrequencia);
+  // console.log("grupoAtraso", correlacaoAtraso);
+  // console.log("grupoColuna", correlacaoColuna);
 
   // Armazena a correlação global
-  correlaçãoFrequenciaGlobal = correlacaoFrequencia;
+  correlacaoFrequenciaGlobal = correlacaoFrequencia;
+  correlacaoColunaGlobal = correlacaoColuna;
 
   // Função para filtrar números de acordo com todos os grupos (frequência, atraso e colunas)
   function filtrarNumerosPorGrupos(atraso, frequencia, coluna) {
@@ -108,6 +110,8 @@ function preparacaoDados() {
       numerosFiltrados[grupoAtraso] = numerosFiltradosGrupo;
     }
 
+    // console.log("numeros friltrados", numerosFiltrados);
+
     return numerosFiltrados;
   }
 
@@ -121,22 +125,58 @@ function preparacaoDados() {
   //console.log("numerosFiltrados", numerosFiltradosPorAtraso);
 
   // Função para excluir números específicos
+  // function excluirNumeros(numerosExcluir, numerosFiltradosPorAtraso) {
+  //   const copiaNumerosFitradosPorAtraso = { ...numerosFiltradosPorAtraso }; // Cria uma cópia
+
+  //   console.log("copia", copiaNumerosFitradosPorAtraso);
+
+  //   //console.log("numerosExcluir", numerosExcluir);
+
+  //   for (const letra in copiaNumerosFitradosPorAtraso) {
+  //     copiaNumerosFitradosPorAtraso[letra] = copiaNumerosFitradosPorAtraso[
+  //       letra
+  //     ].map((numeros) => {
+  //       if (Array.isArray(numeros)) {
+  //         return numeros.filter(
+  //           (numero) => !numerosExcluir.includes(parseInt(numero, 10))
+  //         );
+  //       } else {
+  //         // Se `numeros` não for um array, mas sim um número ou outro valor, apenas retorne-o sem modificações
+  //         return numeros;
+  //       }
+  //     });
+  //   }
+
+  //   return copiaNumerosFitradosPorAtraso;
+  // }
+
   function excluirNumeros(numerosExcluir, numerosFiltradosPorAtraso) {
-    const copiaNumerosFitradosPorAtraso = { ...numerosFiltradosPorAtraso }; // Cria uma cópia
+    const copiaNumerosFitradosPorAtraso = { ...numerosFiltradosPorAtraso };
 
     for (const letra in copiaNumerosFitradosPorAtraso) {
+      // Percorre o array de cada grupo (letra)
       copiaNumerosFitradosPorAtraso[letra] = copiaNumerosFitradosPorAtraso[
         letra
       ].map((numeros) => {
         if (Array.isArray(numeros)) {
+          // Se for um array, filtra removendo os números que estão em numerosExcluir
           return numeros.filter(
             (numero) => !numerosExcluir.includes(parseInt(numero, 10))
           );
         } else {
-          // Se `numeros` não for um array, mas sim um número ou outro valor, apenas retorne-o sem modificações
-          return numeros;
+          // Se não for array, verifica diretamente o número e exclui se necessário
+          return numerosExcluir.includes(parseInt(numeros, 10))
+            ? null
+            : numeros;
         }
       });
+    }
+
+    // Remove quaisquer entradas que tenham sido transformadas em null após a exclusão
+    for (const letra in copiaNumerosFitradosPorAtraso) {
+      copiaNumerosFitradosPorAtraso[letra] = copiaNumerosFitradosPorAtraso[
+        letra
+      ].filter((numero) => numero !== null && numero !== undefined);
     }
 
     return copiaNumerosFitradosPorAtraso;
@@ -148,9 +188,9 @@ function preparacaoDados() {
     numerosFiltradosPorAtraso
   );
 
-  console.log("numerosParaFormacaoDeJogos", numerosParaFormacaoDeJogos);
+  //console.log("numerosParaFormacaoDeJogos", numerosParaFormacaoDeJogos);
 
   return numerosParaFormacaoDeJogos;
 }
 
-export { preparacaoDados, correlaçãoFrequenciaGlobal };
+export { preparacaoDados, correlacaoFrequenciaGlobal, correlacaoColunaGlobal };
