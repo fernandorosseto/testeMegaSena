@@ -19,6 +19,12 @@ import { gruposColunas } from "./modulos/grupoColuna.js";
 exibirGrupos();
 exibirGruposAtraso();
 
+function exibirMain() {
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("main-content").style.display = "grid";
+}
+exibirMain();
+
 let gruposInput;
 let numerosExcluir;
 let jogosFiltrados;
